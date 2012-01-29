@@ -2,13 +2,14 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/TableLayout1"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="350dp" >
 
     <TableRow
         android:id="@+id/TopRow"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:baselineAligned="false" >
 
         <Button
             android:id="@+id/TopLeft"
@@ -69,10 +70,17 @@
     </TableRow>
 
     <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+    </TableRow>
+
+    <TableRow
         android:id="@+id/BottomRow"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:baselineAligned="false"
         android:gravity="bottom" >
 
         <Button
@@ -101,4 +109,32 @@
 
     </TableRow>
 
+    <TableRow
+        android:id="@+id/tableRow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+    </TableRow>
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <requestFocus />
+    </EditText>
+    
 </TableLayout>
