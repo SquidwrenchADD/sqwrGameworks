@@ -11,21 +11,25 @@
         android:layout_weight="1"
         android:baselineAligned="false" >
 
-        <Button
+        <Button      
             android:id="@+id/TopLeft"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="claimSquare"
-            android:text="@string/unused" />
+            android:textSize="50sp"
+            android:textStyle="bold"
+            android:text="" />
 
-        <Button
+        <Button 
             android:id="@+id/TopMiddle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="claimSquare"
-            android:text="@string/unused" />
+            android:textSize="50sp"
+            android:textStyle="bold"
+            android:text="" />
 
         <Button
             android:id="@+id/TopRight"
@@ -33,7 +37,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="claimSquare"
-            android:text="@string/unused" />
+            android:textSize="50sp"
+            android:textStyle="bold"
+            android:text="" />
 
     </TableRow>
 
@@ -49,7 +55,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="claimSquare"
-            android:text="@string/unused" />
+            android:textSize="50sp"
+            android:textStyle="bold"
+            android:text="" />
 
         <Button
             android:id="@+id/MiddleMiddle"
@@ -57,7 +65,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="claimSquare"
-            android:text="@string/unused" />
+            android:textSize="50sp"
+            android:textStyle="bold"
+            android:text="" />
 
         <Button
             android:id="@+id/MiddleRight"
@@ -65,7 +75,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="claimSquare"
-            android:text="@string/unused" />
+            android:textSize="50sp"
+            android:textStyle="bold"
+            android:text="" />
 
     </TableRow>
 
@@ -89,7 +101,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="claimSquare"
-            android:text="@string/unused" />
+            android:textSize="50sp"
+            android:text="" />
 
         <Button
             android:id="@+id/BottomMiddle"
@@ -97,7 +110,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="claimSquare"
-            android:text="@string/unused" />
+            android:textSize="50sp"
+            android:text="" />
 
         <Button
             android:id="@+id/BottomRight"
@@ -105,7 +119,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="claimSquare"
-            android:text="@string/unused" />
+            android:textSize="50sp"
+            android:text="" />
 
     </TableRow>
 
@@ -113,7 +128,6 @@
         android:id="@+id/tableRow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
-
     </TableRow>
 
     <HorizontalScrollView
@@ -128,13 +142,16 @@
             android:orientation="horizontal" >
         </LinearLayout>
     </HorizontalScrollView>
-
-    <EditText
-        android:id="@+id/editText1"
+    
+    <TextView
+        android:id="@+id/textView1"
+        android:background="#FFFFFFFF" 
+        android:textColor="#FF000000"
+        android:layout_weight="0.8"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-
-        <requestFocus />
-    </EditText>
+        android:layout_height="wrap_content" 
+        android:layout_gravity="center"
+        android:gravity = "center">
+    </TextView>
     
 </TableLayout>
