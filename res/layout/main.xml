@@ -102,6 +102,7 @@
             android:layout_weight="1"
             android:onClick="claimSquare"
             android:textSize="50sp"
+            android:textStyle="bold"
             android:text="" />
 
         <Button
@@ -111,6 +112,7 @@
             android:layout_weight="1"
             android:onClick="claimSquare"
             android:textSize="50sp"
+            android:textStyle="bold"
             android:text="" />
 
         <Button
@@ -120,6 +122,7 @@
             android:layout_weight="1"
             android:onClick="claimSquare"
             android:textSize="50sp"
+            android:textStyle="bold"
             android:text="" />
 
     </TableRow>
@@ -145,6 +148,17 @@
     
     <TextView
         android:id="@+id/textView1"
+        android:background="#FFFFFFFF" 
+        android:textColor="#FF000000"
+        android:layout_weight="0.8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_gravity="center"
+        android:gravity = "center">
+    </TextView>
+    
+    <TextView
+        android:id="@+id/textViewScore"
         android:background="#FFFFFFFF" 
         android:textColor="#FF000000"
         android:layout_weight="0.8"

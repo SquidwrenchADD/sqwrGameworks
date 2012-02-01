@@ -2,7 +2,6 @@ package com.example.thor.threeby3;
 
 import java.util.Arrays;
 import android.app.Activity;
-import android.graphics.Color;
 import android.graphics.LightingColorFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -14,14 +13,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	public int player = R.string.you;
-	public String playername = "1";
-	public int rows = 3, cols = 3;
-	public int moves = 0;
+	public String playername = "X", startingplayer = "X";
+	public int rows = 3, cols = 3, moves, xscore, oscore, tscore;
 	public int pointcount[] = new int[8]; //R1,R2,R3,C1,C2,C3,DD,DU
 	public boolean gameover = false;
 	private SensorManager sensMgr;
@@ -36,6 +33,8 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
         setContentView(R.layout.main);
 		TextView tv = (TextView) findViewById(R.id.textView1);
 		tv.setText("Player " + playername + "'s turn");
+		TextView tvs = (TextView) findViewById(R.id.textViewScore);
+		tvs.setText("Score:   X:0   O:0   Tie:0");
     }
     
     protected void onResume() {
@@ -56,7 +55,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    	Button button = (Button)view;
 	    	if(button.getText().equals("")) {
 	    		int pvalue;
-	    		if (player == R.string.you) {
+	    		if (playername == "X") {
 	    			pvalue = -1;
 	    			button.getBackground().setColorFilter(new LightingColorFilter(0xFFEEEEEE, 0xFFFF0000));
 	    	    	button.setText("X");
@@ -114,18 +113,27 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    	     }
 				moves++;
 				TextView tv = (TextView) findViewById(R.id.textView1);
+				TextView tvs = (TextView) findViewById(R.id.textViewScore);
 	    		if (checkForWinCondition()) {
+	    			buttonGlow(pvalue * 3);
+	    			if (playername == "X")
+	    				xscore += 1;
+	    			else
+	    				oscore += 1;
 	    			tv.setText("Player " + playername + " WINS!");
+	    			tvs.setText("Click Any Square To Start New Game");
 	    			gameover = true;
 	    		}
 	    		else {
 	    			if (moves == rows * cols) {
 	    				tv.setText("Game Over: Tie");
+	    				tscore += 1;
+	    				tvs.setText("Click Any Square To Start New Game");
 	    				gameover = true;
 	    			}
 	    			else {
 	    				player = (player == R.string.you) ? R.string.me : R.string.you;
-	    				playername = (playername == "1") ? "2" : "1";
+	    				playername = (playername == "X") ? "O" : "X";
 	    				tv.setText("Player " + playername + "'s turn");
 	    			}
 	    		}	
@@ -134,7 +142,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
     }
     
     public boolean checkForWinCondition() {
-    	if (moves < (2 * rows - 1)) return false;
+    	if (moves < (2 * rows - 1)) return false;    		
     	int check[] = (int[])pointcount.clone();
     	Arrays.sort(check);
     	if (check[0] == -3 || check[7] == 3)
@@ -189,10 +197,13 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		gameover = false;
 		moves = 0;
 		Arrays.fill(pointcount, 0);
+		startingplayer = (startingplayer == "X") ? "O" : "X";
+		playername = startingplayer;
 		TextView tv = (TextView) findViewById(R.id.textView1);
 		tv.setText("Player " + playername + "'s turn");
+		TextView tvs = (TextView) findViewById(R.id.textViewScore);
+		tvs.setText("Score:   X:" + xscore + "   O:" + oscore + "   Tie:" + tscore);
 		this.player = R.string.you;
-		playername = "1";
 	}
 
 	public void onAccuracyChanged(Sensor arg0, int arg1) {
@@ -204,5 +215,86 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		  startOver();
 		}
 		return;
+	}
+	
+	public void buttonGlow(int winner) {
+		int glowcolor;
+		if (winner == 3)
+			glowcolor = 0xFF0000FF;
+		else
+			glowcolor = 0xFFFF0000;
+		Button button;
+		for (int p = 0; p < 8; p++) {
+			if (pointcount[p] == winner) {
+				switch(p) {
+	    	      	case 0:
+	    	      		button = (Button) findViewById(R.id.TopLeft);
+	    	      		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+	    	      		button = (Button) findViewById(R.id.TopMiddle);
+	    	      		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+	    	      		button = (Button) findViewById(R.id.TopRight);
+	    	      		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+	    	      		break;
+	    	      	case 1: 
+		    	    	button = (Button) findViewById(R.id.MiddleLeft);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		button = (Button) findViewById(R.id.MiddleMiddle);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		button = (Button) findViewById(R.id.MiddleRight);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		break;    	                            
+	    	      	case 2:
+	    	      		button = (Button) findViewById(R.id.BottomLeft);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		button = (Button) findViewById(R.id.BottomMiddle);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		button = (Button) findViewById(R.id.BottomRight);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+	    	      		break;
+	    	      	case 3: 
+	    	      		button = (Button) findViewById(R.id.TopLeft);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		button = (Button) findViewById(R.id.MiddleLeft);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		button = (Button) findViewById(R.id.BottomLeft);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		break;
+	    	      	case 4:
+	    	      		button = (Button) findViewById(R.id.TopMiddle);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		button = (Button) findViewById(R.id.MiddleMiddle);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		button = (Button) findViewById(R.id.BottomMiddle);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		break;
+	    	      	case 5: 
+	    	      		button = (Button) findViewById(R.id.TopRight);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		button = (Button) findViewById(R.id.MiddleRight);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		button = (Button) findViewById(R.id.BottomRight);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		break;    	                            
+	    	      	case 6:
+	    	      		button = (Button) findViewById(R.id.TopLeft);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		button = (Button) findViewById(R.id.MiddleMiddle);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		button = (Button) findViewById(R.id.BottomRight);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		break;
+	    	      	case 7: 
+	    	      		button = (Button) findViewById(R.id.TopRight);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		button = (Button) findViewById(R.id.MiddleMiddle);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		button = (Button) findViewById(R.id.BottomLeft);
+		    	  		button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+		    	  		break; 
+	    	      default:
+	    	          break;
+	    	     }
+			}
+		}
 	}
 }
