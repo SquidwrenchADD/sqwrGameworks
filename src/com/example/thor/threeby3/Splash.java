@@ -2,17 +2,17 @@ package com.example.thor.threeby3;
 
 import android.app.Activity;
 import android.content.Intent;
-//import android.media.MediaPlayer;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 public class Splash extends Activity{
 
-//	MediaPlayer ourSong;
+	MediaPlayer ourSong;
 	@Override
 	protected void onCreate(Bundle TTTTime) {
 		super.onCreate(TTTTime);
-//		ourSong = MediaPlayer.create(Splash.this, R.raw.tttsplash);
-//		ourSong.start();
+		ourSong = MediaPlayer.create(Splash.this, R.raw.tttsplash);
+		ourSong.start();
 		setContentView(R.layout.splash);
 		Thread timer = new Thread(){
 			public void run(){
@@ -29,11 +29,11 @@ public class Splash extends Activity{
 		timer.start();
 	}
 	
-//	@Override
-//	protected void onPause() {
-//		// TODO Auto-generated method stub
-//		super.onPause();
-//		ourSong.release();
-//		finish();
-//	}
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		ourSong.release();
+		finish();
+	}
 }
