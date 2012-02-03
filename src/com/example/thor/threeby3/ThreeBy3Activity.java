@@ -5,11 +5,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.LightingColorFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+//import android.media.AudioManager;
+import android.media.MediaPlayer;
+//import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -30,6 +34,11 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	public List<Integer> squares = new ArrayList<Integer>(Arrays.asList(0,1,2,3,4,5,6,7,8)); //TL,TM,TR,ML,MM,MR,BL,BM,BR
 	private SensorManager sensMgr;
 	private Sensor accelerometer;
+    //private static SoundPool sounds;
+    //private static int computerwintrashtalk;
+    //private static MediaPlayer music;
+    private static boolean sound = false;
+    private static MediaPlayer trashTalk;
 	//private static final String TAG = "MyActivity"; 
 	
     /** Called when the activity is first created. */
@@ -39,6 +48,12 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		sensMgr = (SensorManager)getSystemService(SENSOR_SERVICE);
         accelerometer = sensMgr.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         setContentView(R.layout.main);
+        Context context = getApplicationContext();
+        //sound = TTTPreferences.sound(context); // should there be sound?
+        trashTalk = MediaPlayer.create(context, R.raw.maybeyoushould);
+	    //sounds = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+	    //computerwintrashtalk = sounds.load(context, R.raw.maybeyoushould, 1);
+	    //music = MediaPlayer.create(context, R.raw.something);
 		TextView tv = (TextView) findViewById(R.id.textView1);
 		tv.setText("Player " + playername + "'s turn");
 		TextView tvs = (TextView) findViewById(R.id.textViewScore);
@@ -53,7 +68,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    			computeropponent = false;
 	    		}
 	    	}
-	    });
+	    });     
     }
     
     protected void onResume() {
@@ -65,7 +80,8 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
     	super.onPause();
     	sensMgr.unregisterListener(this);
     }
-
+    
+    //When button is clicked
 	public void claimSquare(View view) {
 		if (gameover == true) {
 			startOver();
@@ -146,10 +162,14 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				TextView tvs = (TextView) findViewById(R.id.textViewScore);
 	    		if (checkForWinCondition()) {
 	    			buttonGlow(pvalue * 3);
-	    			if (playername == "X")
+	    			if (playername == "X") 
 	    				xscore += 1;
-	    			else
-	    				oscore += 1;
+	    				
+	    			else {
+	    				oscore += 1; 
+	    				if (computeropponent == true)
+	    					playComputerWinTrashTalk();
+	    			}
 	    			tv.setText("Player " + playername + " WINS!");
 	    			tvs.setText("Click Any Square To Start New Game");
 	    			gameover = true;
@@ -629,12 +649,12 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				      				button.performClick();
 				      				return;
 				      			}
-				      			button = (Button) findViewById(R.id.TopMiddle);
+				      			button = (Button) findViewById(R.id.TopRight);
 				      			if (button.getText() == "") {
 				      				button.performClick();
 				      				return;
 				      			}
-				      			button = (Button) findViewById(R.id.TopRight);
+				      			button = (Button) findViewById(R.id.TopMiddle);
 				      			if (button.getText() == "") {
 				      				button.performClick();
 				      				return;
@@ -642,11 +662,6 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				      			break;
 				      		case 1: //R2
 				      			button = (Button) findViewById(R.id.MiddleLeft);
-				      			if (button.getText() == "") {
-				      				button.performClick();
-				      				return;
-				      			}
-				      			button = (Button) findViewById(R.id.MiddleMiddle);
 				      			if (button.getText() == "") {
 				      				button.performClick();
 				      				return;
@@ -663,12 +678,12 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				      				button.performClick();
 				      				return;
 				      			}
-				      			button = (Button) findViewById(R.id.BottomMiddle);
+				      			button = (Button) findViewById(R.id.BottomRight);
 				      			if (button.getText() == "") {
 				      				button.performClick();
 				      				return;
 				      			}
-				      			button = (Button) findViewById(R.id.BottomRight);
+				      			button = (Button) findViewById(R.id.BottomMiddle);
 				      			if (button.getText() == "") {
 				      				button.performClick();
 				      				return;
@@ -680,12 +695,12 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				      				button.performClick();
 				      				return;
 				      			}
-				      			button = (Button) findViewById(R.id.MiddleLeft);
+				      			button = (Button) findViewById(R.id.BottomLeft);
 				      			if (button.getText() == "") {
 				      				button.performClick();
 				      				return;
 				      			}
-				      			button = (Button) findViewById(R.id.BottomLeft);
+				      			button = (Button) findViewById(R.id.MiddleLeft);
 				      			if (button.getText() == "") {
 				      				button.performClick();
 				      				return;
@@ -693,11 +708,6 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				      			break;
 				      		case 4:	//C2	
 				      			button = (Button) findViewById(R.id.TopMiddle);
-				      			if (button.getText() == "") {
-				      				button.performClick();
-				      				return;
-				      			}
-				      			button = (Button) findViewById(R.id.MiddleMiddle);
 				      			if (button.getText() == "") {
 				      				button.performClick();
 				      				return;
@@ -714,12 +724,12 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				      				button.performClick();
 				      				return;
 				      			}
-				      			button = (Button) findViewById(R.id.MiddleRight);
+				      			button = (Button) findViewById(R.id.BottomRight);
 				      			if (button.getText() == "") {
 				      				button.performClick();
 				      				return;
 				      			}
-				      			button = (Button) findViewById(R.id.BottomRight);
+				      			button = (Button) findViewById(R.id.MiddleRight);
 				      			if (button.getText() == "") {
 				      				button.performClick();
 				      				return;
@@ -727,11 +737,6 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				      			break;
 				      		case 6: //DD
 				      			button = (Button) findViewById(R.id.TopLeft);
-				      			if (button.getText() == "") {
-				      				button.performClick();
-				      				return;
-				      			}
-				      			button = (Button) findViewById(R.id.MiddleMiddle);
 				      			if (button.getText() == "") {
 				      				button.performClick();
 				      				return;
@@ -748,11 +753,6 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				      				button.performClick();
 				      				return;
 				      			}
-				      			button = (Button) findViewById(R.id.MiddleMiddle);
-				      			if (button.getText() == "") {
-				      				button.performClick();
-				      				return;
-				      			}
 				      			button = (Button) findViewById(R.id.BottomLeft);
 				      			if (button.getText() == "") {
 				      				button.performClick();
@@ -764,11 +764,39 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 						}		
 					}
 				}
+				//take corner if possible
+				button = (Button) findViewById(R.id.TopLeft);
+      			if (button.getText() == "") {
+      				button.performClick();
+      				return;
+      			}
+      			button = (Button) findViewById(R.id.TopRight);
+      			if (button.getText() == "") {
+      				button.performClick();
+      				return;
+      			}
+      			button = (Button) findViewById(R.id.BottomLeft);
+      			if (button.getText() == "") {
+      				button.performClick();
+      				return;
+      			}
+      			button = (Button) findViewById(R.id.BottomRight);
+      			if (button.getText() == "") {
+      				button.performClick();
+      				return;
+      			}
+      			//might not ever get here
       			randomMove();
 			}
 		}
 	}
-		
+	
+	public static void playComputerWinTrashTalk() {
+	    //if (!sound) return; // if sound is turned off no need to continue
+		trashTalk.start();
+	    //sounds.play(computerwintrashtalk, 1, 1, 1, 0, 1);
+	}
+
 	public void buttonGlow(int winner) {
 		int glowcolor;
 		if (winner == 3)

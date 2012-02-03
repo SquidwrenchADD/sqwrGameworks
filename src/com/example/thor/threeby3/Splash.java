@@ -7,12 +7,13 @@ import android.os.Bundle;
 
 public class Splash extends Activity{
 
-	MediaPlayer ourSong;
+	//show splash image and play jingle
+	MediaPlayer splashMusic;
 	@Override
 	protected void onCreate(Bundle TTTTime) {
 		super.onCreate(TTTTime);
-		ourSong = MediaPlayer.create(Splash.this, R.raw.tttsplash);
-		ourSong.start();
+		splashMusic = MediaPlayer.create(Splash.this, R.raw.tttsplashsound);
+		splashMusic.start();
 		setContentView(R.layout.splash);
 		Thread timer = new Thread(){
 			public void run(){
@@ -31,9 +32,8 @@ public class Splash extends Activity{
 	
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
-		ourSong.release();
+		splashMusic.release();
 		finish();
 	}
 }
