@@ -7,5 +7,7 @@
     <string name="you">You</string>
     <string name="me">Me</string>
     <string name="startOver">Start Over</string>
+    <string name="saveGame">Save Game</string>
+    <string name="loadGame">Load Game</string>
 
 </resources>
