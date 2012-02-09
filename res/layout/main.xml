@@ -2,7 +2,7 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/TableLayout1"
     android:layout_width="fill_parent"
-    android:layout_height="350dp" >
+    android:layout_height="400dp" >
 
     <TableRow
         android:id="@+id/TopRow"
@@ -174,4 +174,10 @@
         android:layout_height="wrap_content"
         android:text="Vs Computer" />
     
+    <CheckBox
+        android:id="@+id/checkBoxToe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Toe" />
+     
 </TableLayout>
