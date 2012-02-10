@@ -9,6 +9,7 @@ import java.util.Random;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.LightingColorFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -34,8 +35,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	public String playername = "X", startingplayer = "X";
 	public int rows = 3, cols = 3, moves, moveslimit = rows * cols, xscore, oscore, tscore, toechosen;
 	public int pointcount[] = new int[8]; //R1,R2,R3,C1,C2,C3,DD,DU = ways to win
-	public int squaremoves[] = new int[11]; //0 = first move, positive = O, negative = X, TL,TM,TR,ML,MM,MR,BL,BM,BR
-	public int toemoves[] = new int[2]; //TL,TM,TR,ML,MM,MR,BL,BM,BR
+	public int squaremoves[] = new int[13]; //0 = first move, positive = O, negative = X, TL,TM,TR,ML,MM,MR,BL,BM,BR
 	public boolean gameover = false, computeropponent = false, toe = false;
 	public final int row1[] =  {R.id.TopLeft,		R.id.TopRight,		R.id.TopMiddle};
 	public final int row2[] =  {R.id.MiddleMiddle,R.id.MiddleLeft,	R.id.MiddleRight};
@@ -109,10 +109,12 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    			if (cb.isChecked())
 	    				cb.setChecked(false);
 	    			cb.setClickable(false);
+	    			cb.setTextColor(Color.GRAY);
 	    		}
 	    		else {
 	    			toe = false;
     				cb.setClickable(true);
+    				cb.setTextColor(Color.WHITE);
 	    		}
 	    		if (moves > 0)
 	    			startOver();
@@ -274,7 +276,6 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		moveslimit = 9;
 		Arrays.fill(pointcount, 0);
 		Arrays.fill(squaremoves, 0);
-		Arrays.fill(toemoves,0);
 		toechosen = 0;
 		squarestaken.clear();
 		startingplayer = (startingplayer.equals("X")) ? "O" : "X";
@@ -480,11 +481,10 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	public void loadGame() {	
 				
 		String token = ",";
-		toe = false;
+		
 		boolean remsound = sound;
 		sound = false;
         SharedPreferences settings = getSharedPreferences("SAVEGAME", 0);
-        boolean remtoe = settings.getBoolean("toe", false);
         
         computeropponent = settings.getBoolean("vscomputer", computeropponent);
 	    CheckBox cb = (CheckBox) findViewById(R.id.checkBoxAI);
@@ -499,14 +499,32 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				cb.setChecked(false);
 		}
 		
+        toe = settings.getBoolean("toe", toe);
+	    CheckBox cbtoe = (CheckBox) findViewById(R.id.checkBoxToe);
+		if (toe) {
+			if (!cbtoe.isChecked()) {
+				cbtoe.setChecked(true);
+			}
+		}
+		else {
+			if (cbtoe.isChecked())
+				cbtoe.setChecked(false);
+		}
+		
 		startOver();
 		
 		String smoves = settings.getString("gmoves", "");
         int[] convertedIntArray = StringToArrayConverter.convertTokenizedStringToIntArray(smoves, token);
+        
+        boolean toehold = toe;
+        boolean comphold = computeropponent;
+                
+        toe = false;
+        computeropponent = false;
     
         Button button;
         Integer mov;
-        for (int s = 0; s < 9; s++) {
+        for (int s = 0; s < 13; s++) {
             mov = convertedIntArray[s];
             if (mov == 0) 
             	break;
@@ -514,23 +532,27 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
             	playername = "X";
             else
             	playername = "O";
-            button = (Button) findViewById(Math.abs(mov));
-            button.performClick();
-            
-            if (remtoe) {
-	            if (moves == 3) {
-	            	toechosen = toemoves[0];
+            if (toehold) {
+            	if (moves == 3 || moves == 6) {
+	            	toechosen = convertedIntArray[s];
 	            	playToe();
-	            }
-	            else if (moves == 5) {
-	            	toechosen = toemoves[1];
-	            	playToe();
-	            }
+            	}
+            	else if (moves == 4 || moves == 7)
+            		cleanToe();
+            	else {
+            		button = (Button) findViewById(Math.abs(mov));
+    	        	button.performClick();
+            	}
             }
+	        else {
+	        	button = (Button) findViewById(Math.abs(mov));
+	        	button.performClick();
+	        }
         }
         
         sound = remsound;
-        toe = remtoe;
+        toe = toehold;
+        computeropponent = comphold;
 	
 		gameover = settings.getBoolean("gameover", gameover);
 		if (!gameover) {
@@ -563,10 +585,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		
 		button.setText("T");
 		button.getBackground().setColorFilter(new LightingColorFilter(0xFFEEEEEE, 0xFF00FF00));
-		if (moves == 3)
-			toemoves[0] = toechosen;
-		else
-			toemoves[1] = toechosen;
+		squaremoves[moves] = toechosen;
  	}
  }
  
