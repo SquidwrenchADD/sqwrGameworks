@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Random;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.LightingColorFilter;
@@ -75,15 +74,14 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		sensMgr = (SensorManager)getSystemService(SENSOR_SERVICE);
         accelerometer = sensMgr.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         setContentView(R.layout.main);
-        Context context = getApplicationContext();
-        trashTalk = MediaPlayer.create(context, R.raw.maybeyoushould);
+        trashTalk = MediaPlayer.create(this, R.raw.maybeyoushould);
         //xbeep = MediaPlayer.create(context, R.raw.ttt_x);
         //obeep = MediaPlayer.create(context, R.raw.ttt_o);
 	    sounds = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
-	    xbeep = sounds.load(context, R.raw.ttt_x, 1);
-	    obeep = sounds.load(context, R.raw.ttt_o, 1);
-	    gamewin = sounds.load(context, R.raw.gamewin, 1);
-	    gametie = sounds.load(context, R.raw.gametie, 1);
+	    xbeep = sounds.load(this, R.raw.ttt_x, 1);
+	    obeep = sounds.load(this, R.raw.ttt_o, 1);
+	    gamewin = sounds.load(this, R.raw.gamewin, 1);
+	    gametie = sounds.load(this, R.raw.gametie, 1);
 	    //music = MediaPlayer.create(context, R.raw.something);
 		showWhoseTurn();
 		showScore();
@@ -185,9 +183,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		    					playComputerWinTrashTalk();
 		    			}
 		    			tv.setText("Player " + playername + " WINS!");
-		    			//tvs.setText("Click Any Square To Start New Game");
-		    			String ss = Arrays.toString(pointcount);
-		    			tvs.setText(ss);
+		    			tvs.setText("Click Any Square To Start New Game");
 		    			gameover = true;
 		    			return;
 		    		}
@@ -211,13 +207,19 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    		if (playername.equals("O") && computeropponent == true)
 	    			computerMove();
 	    		
-	    		// SLEEP 1 SEC
-	    	    Handler handler = new Handler(); 
-	    	    handler.postDelayed(new Runnable() { 
-	    	         public void run() { 
-	    	        	 int t = 0;
-	    	         } 
-	    	    }, 1000); 
+//	    		// SLEEP 1 SEC
+//	    	    Handler handler = new Handler(); 
+//	    	    handler.postDelayed(new Runnable() { 
+//	    	         public void run() { 
+//	    	        	 
+//	    	        	 if (toe) {	
+//	    		    		if (moves == 3 || moves == 6)
+//	    		    			playToe();
+//	    		    		if (moves == 4 || moves == 7) 		
+//	    		    			cleanToe();
+//	    		    	} 
+//	    	         } 
+//	    	    }, 1000); 
 	    		
 	    		if (toe) {	
 	    			if (moves == 3 || moves == 6)
@@ -402,18 +404,16 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	}
 	
 	public void popup(String debug) {
-		Context context = getApplicationContext();
 		CharSequence text = debug;
 		int duration = Toast.LENGTH_LONG;
-		Toast toast = Toast.makeText(context, text, duration);
+		Toast toast = Toast.makeText(this, text, duration);
 		toast.show();
 	}
 	
 	public void popup(int debug) {
-		Context context = getApplicationContext();
 		CharSequence text = Integer.toString(debug);
 		int duration = Toast.LENGTH_LONG;
-		Toast toast = Toast.makeText(context, text, duration);
+		Toast toast = Toast.makeText(this, text, duration);
 		toast.show();
 	}
 	
@@ -565,11 +565,21 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	}
 	
 	public void cleanToe() {
-		Button button = (Button) findViewById(toechosen);
-		button.getBackground().setColorFilter(new LightingColorFilter(0xFFF8F8F8, 0));
-		button.setText("");
+//		Button button = (Button) findViewById(toechosen);
+//		button.getBackground().setColorFilter(new LightingColorFilter(0xFFF8F8F8, 0));
+//		button.setText("");
 		squaresremaining.add(new Integer(toechosen));
 		squarestaken.remove(new Integer(toechosen));
+		
+		// SLEEP 1 SEC
+	    Handler handler = new Handler(); 
+	    handler.postDelayed(new Runnable() { 
+	         public void run() { 
+	        	Button button = (Button) findViewById(toechosen);
+	        	button.setText("");
+	     		button.getBackground().setColorFilter(new LightingColorFilter(0xFFF8F8F8, 0));
+	         } 
+	    }, 1000); 
 	}
 
 	public void playToe() {
@@ -583,9 +593,19 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		for (Integer sqtrio : inTrio[squares.indexOf(toechosen)])
 			pointcount[sqtrio] += pvalue;
 		
-		button.setText("T");
-		button.getBackground().setColorFilter(new LightingColorFilter(0xFFEEEEEE, 0xFF00FF00));
 		squaremoves[moves] = toechosen;
+//		button.setText("T");
+//		button.getBackground().setColorFilter(new LightingColorFilter(0xFFEEEEEE, 0xFF00FF00));
+		
+		// SLEEP 1 SEC
+	    Handler handler = new Handler(); 
+	    handler.postDelayed(new Runnable() { 
+	         public void run() { 
+	        	 Button button = (Button) findViewById(toechosen);
+	        	 button.setText("T");
+	     		 button.getBackground().setColorFilter(new LightingColorFilter(0xFFEEEEEE, 0xFF00FF00));
+	         } 
+	    }, 1000); 
  	}
  }
  
