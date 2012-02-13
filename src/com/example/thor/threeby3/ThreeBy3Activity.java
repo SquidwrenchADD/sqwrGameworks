@@ -122,13 +122,19 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
     
     protected void onResume() {
     	super.onResume();
+    	loadGame();
     	sensMgr.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
     
     
     protected void onPause() {
     	super.onPause();
+    	saveGame();
     	sensMgr.unregisterListener(this);
+    }
+    
+    protected void onSaveInstanceState (Bundle outState) {
+    	
     }
     
     //When button is clicked
@@ -464,18 +470,18 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		}
 	}
 
-	public void saveGame() {	
-		
-		if (moves > 0) {	
-	        SharedPreferences settings = getSharedPreferences("SAVEGAME", 0);
-	        SharedPreferences.Editor editor = settings.edit();
-	        editor.putString("gmoves", Arrays.toString(squaremoves).replace("[", "").replace("]", "").replace(" ", ""));
-			editor.putBoolean("vscomputer", computeropponent);
-		    editor.putBoolean("gameover", gameover);
-		    editor.putString("playername", playername);
-		    editor.putBoolean("toe", toe);
-		    editor.commit();
-		}
+	public void saveGame() {		
+	    SharedPreferences settings = getSharedPreferences("SAVEGAME", 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putString("gmoves", Arrays.toString(squaremoves).replace("[", "").replace("]", "").replace(" ", ""));
+		editor.putBoolean("gameover", gameover);
+		editor.putString("playername", playername);
+		editor.putBoolean("vscomputer", computeropponent);
+	    editor.putBoolean("toe", toe);
+	    editor.putInt("xwins", xscore);
+	    editor.putInt("owins", oscore);
+	    editor.putInt("twins", tscore);
+	    editor.commit();
 	}
 	
 	public void loadGame() {	
@@ -553,6 +559,11 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
         sound = remsound;
         toe = toehold;
         computeropponent = comphold;
+        
+        xscore = Math.max(settings.getInt("xwins",xscore),xscore);
+        oscore = Math.max(settings.getInt("owins",oscore),oscore);
+        tscore = Math.max(settings.getInt("twins",tscore),tscore);
+        showScore();
 	
 		gameover = settings.getBoolean("gameover", gameover);
 		if (!gameover) {
