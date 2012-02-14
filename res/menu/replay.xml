@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/startOver" android:title="@string/startOver"></item>
-    
+    <item android:id="@+id/saveGame" android:title="@string/saveGame"></item>
+    <item android:id="@+id/loadGame" android:title="@string/loadGame"></item>
 
 </menu>

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">sqwrGameworks TicTacToe</string>
-    <string name="app_name">TicTacToe</string>
+    <string name="hello">Hello World, ThreeBy3Activity!</string>
+    <string name="app_name">ThreeBy3</string>
     <string name="unused">Unused</string>
     <string name="you">You</string>
     <string name="me">Me</string>
     <string name="startOver">Start Over</string>
+    <string name="saveGame">Save Game</string>
+    <string name="loadGame">Load Game</string>
 
 </resources>
