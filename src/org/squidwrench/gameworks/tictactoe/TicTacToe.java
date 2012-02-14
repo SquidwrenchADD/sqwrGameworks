@@ -1,5 +1,6 @@
 package org.squidwrench.gameworks.tictactoe;
 
+import com.example.thor.threeby3.R;
 import android.app.Activity;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
