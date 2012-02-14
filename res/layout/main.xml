@@ -1,12 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/gridview"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/TableLayout1"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:columnWidth="90dp"
-    android:numColumns="3"
-    android:verticalSpacing="10dp"
-    android:horizontalSpacing="10dp"
-    android:stretchMode="columnWidth"
-    android:gravity="center"
-    />
+    android:layout_height="fill_parent" >
+
+    <TableRow
+        android:id="@+id/TopRow"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <Button
+            android:id="@+id/TopLeft"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="claimSquare"
+            android:text="@string/unused" />
+
+        <Button
+            android:id="@+id/TopMiddle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="claimSquare"
+            android:text="@string/unused" />
+
+        <Button
+            android:id="@+id/TopRight"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="claimSquare"
+            android:text="@string/unused" />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/MiddleRow"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <Button
+            android:id="@+id/MiddleLeft"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="claimSquare"
+            android:text="@string/unused" />
+
+        <Button
+            android:id="@+id/MiddleMiddle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="claimSquare"
+            android:text="@string/unused" />
+
+        <Button
+            android:id="@+id/MiddleRight"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="claimSquare"
+            android:text="@string/unused" />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/BottomRow"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom" >
+
+        <Button
+            android:id="@+id/BottomLeft"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="claimSquare"
+            android:text="@string/unused" />
+
+        <Button
+            android:id="@+id/BottomMiddle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="claimSquare"
+            android:text="@string/unused" />
+
+        <Button
+            android:id="@+id/BottomRight"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="claimSquare"
+            android:text="@string/unused" />
+
+    </TableRow>
+
+</TableLayout>
