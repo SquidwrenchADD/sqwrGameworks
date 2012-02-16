@@ -60,7 +60,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
     private static boolean sound = true;
     private static MediaPlayer trashTalk;
     public Random rand = new Random();
-    private static final String SERVLET_URL = "http://";
+    //private static final String SERVLET_URL = "http://";
     public boolean online = false;
 	//private static final String TAG = "MyActivity"; 
 	
@@ -127,10 +127,11 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
     @Override
 	protected void onResume() {
     	super.onResume();
-//    	if (!firstOnResume)
+    	try{
     		loadGame("ORIENTHOLD");
-//    	else
-//    		firstOnResume = false;
+    	}catch(NullPointerException e){
+    		startOver();
+    	}
     	sensMgr.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
     
@@ -147,13 +148,34 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
     	
     }
     
+	public void playOnlineRegister() {
+		//createGameKey
+		//InsertGameKeyToGamesTableOfServletDB
+		//WaitForOpponentToArrive
+	} 
     
 	public void playOnline() {
 		online = true;
-		//createGameKey
-		//InsertGameKeyToGamesTableOfServletDB
-		//DisableButtons
+		//DisableXOButtons
 		//WaitForServletToSayItsYourMove
+	}
+	
+	public void waitForOpponentsMove() {
+		//QueryServletDB
+		//Button.click()
+		buttonsClickable(true);
+	}
+	
+	public void reportMove(Integer squareid) {
+		//InsertMoveToMovesTableOfServletDB
+	}
+	
+	public void buttonsClickable(boolean clickable) {
+		Button button;
+		for (Integer squareid : squares) {
+			button = (Button) findViewById(squareid);
+			button.setClickable(clickable);
+		}
 	}
     
     //When button is clicked
@@ -230,28 +252,18 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    		playername = (playername.equals("X")) ? "O" : "X";
 	    		showWhoseTurn();
 	    		if (playername.equals("O") && computeropponent == true)
-	    			computerMove();
-	    		
-//	    		// SLEEP 1 SEC
-//	    	    Handler handler = new Handler(); 
-//	    	    handler.postDelayed(new Runnable() { 
-//	    	         public void run() { 
-//	    	        	 
-//	    	        	 if (toe) {	
-//	    		    		if (moves == 3 || moves == 6)
-//	    		    			playToe();
-//	    		    		if (moves == 4 || moves == 7) 		
-//	    		    			cleanToe();
-//	    		    	} 
-//	    	         } 
-//	    	    }, 1000); 
-	    		
-	    		if (toe) {	
+	    			computerMove();    		
+	    		else if (toe) {	
 	    			if (moves == 3 || moves == 6)
 	    				playToe();
 	    			if (moves == 4 || moves == 7) 		
 	    				cleanToe();
 	    		} 
+	    		else if (online) {
+	    			buttonsClickable(false);
+	    			reportMove(squareid);
+	    			waitForOpponentsMove();
+	    		}
 	    	}
     	}
     }
