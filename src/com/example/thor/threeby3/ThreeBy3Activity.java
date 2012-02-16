@@ -19,7 +19,6 @@ import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,14 +51,17 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	public final List<Integer> squares = new ArrayList<Integer>(Arrays.asList(R.id.TopLeft,R.id.TopMiddle,R.id.TopRight,R.id.MiddleLeft,R.id.MiddleMiddle,R.id.MiddleRight,R.id.BottomLeft,R.id.BottomMiddle,R.id.BottomRight)); //TL,TM,TR,ML,MM,MR,BL,BM,BR
 	public List<Integer> squaresremaining = new ArrayList<Integer>(Arrays.asList(R.id.TopLeft,R.id.TopMiddle,R.id.TopRight,R.id.MiddleLeft,R.id.MiddleMiddle,R.id.MiddleRight,R.id.BottomLeft,R.id.BottomMiddle,R.id.BottomRight)); //TL,TM,TR,ML,MM,MR,BL,BM,BR
 	public List<Integer> squarestaken = new ArrayList<Integer>(); //TL,TM,TR,ML,MM,MR,BL,BM,BR
+	public boolean firstOnResume = true;
 	private SensorManager sensMgr;
 	private Sensor accelerometer;
     private static SoundPool sounds;
-    private static int xbeep, obeep, gamewin, gametie; 
+    private static int xbeep, obeep, toebeep, toegobeep, gamewin, gametie; 
     //private static MediaPlayer music;
     private static boolean sound = true;
     private static MediaPlayer trashTalk;
     public Random rand = new Random();
+    private static final String SERVLET_URL = "http://";
+    public boolean online = false;
 	//private static final String TAG = "MyActivity"; 
 	
     /** Called when the activity is first created. */
@@ -80,6 +82,8 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    sounds = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
 	    xbeep = sounds.load(this, R.raw.ttt_x, 1);
 	    obeep = sounds.load(this, R.raw.ttt_o, 1);
+	    toebeep = sounds.load(this, R.raw.toe,1);
+	    toegobeep = sounds.load(this, R.raw.toego,1);
 	    gamewin = sounds.load(this, R.raw.gamewin, 1);
 	    gametie = sounds.load(this, R.raw.gametie, 1);
 	    //music = MediaPlayer.create(context, R.raw.something);
@@ -120,22 +124,37 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    });     
     }
     
-    protected void onResume() {
+    @Override
+	protected void onResume() {
     	super.onResume();
-    	loadGame();
+//    	if (!firstOnResume)
+    		loadGame("ORIENTHOLD");
+//    	else
+//    		firstOnResume = false;
     	sensMgr.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
     
     
-    protected void onPause() {
+    @Override
+	protected void onPause() {
     	super.onPause();
-    	saveGame();
+    	saveGame("ORIENTHOLD");
     	sensMgr.unregisterListener(this);
     }
     
-    protected void onSaveInstanceState (Bundle outState) {
+    @Override
+	protected void onSaveInstanceState (Bundle outState) {
     	
     }
+    
+    
+	public void playOnline() {
+		online = true;
+		//createGameKey
+		//InsertGameKeyToGamesTableOfServletDB
+		//DisableButtons
+		//WaitForServletToSayItsYourMove
+	}
     
     //When button is clicked
 	public void claimSquare(View view) {
@@ -239,30 +258,31 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
     
     public boolean checkForWinCondition() {
     	if (moves < (2 * rows - 1)) return false;    		
-    	int check[] = (int[])pointcount.clone();
+    	int check[] = pointcount.clone();
     	Arrays.sort(check);
     	if (check[0] == -3 || check[7] == 3)
     		return true;    		
     	return false;
     }
-    
 
-    public boolean onCreateOptionsMenu(Menu menu) {
+    @Override
+	public boolean onCreateOptionsMenu(Menu menu) {
     	MenuInflater inflater = getMenuInflater();
     	inflater.inflate(R.menu.replay, menu);
     	return true;
     }
     
-    public boolean onOptionsItemSelected(MenuItem item) {
+    @Override
+	public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
     		case R.id.startOver:
     			startOver();
     			return true;
     		case R.id.saveGame:
-    			saveGame();
+    			saveGame("SAVEGAME");
     			return true;
     		case R.id.loadGame:
-    			loadGame();
+    			loadGame("SAVEGAME");
     			return true;
     		default:
     			return super.onOptionsItemSelected(item);
@@ -441,6 +461,18 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    //obeep.start();
 	}
 	
+	public static void playToebeep() {
+	    if (!sound) return; // if sound is turned off no need to continue
+	    	sounds.play(toebeep, 1, 1, 1, 0, 1);
+	    //obeep.start();
+	}
+	
+	public static void playToeGobeep() {
+	    if (!sound) return; // if sound is turned off no need to continue
+	    	sounds.play(toebeep, 1, 1, 1, 0, 1);
+	    //obeep.start();
+	}
+	
 	public static void playGamewin() {
 	    if (!sound) return; // if sound is turned off no need to continue
 	    	sounds.play(gamewin, 1, 1, 1, 0, 1);
@@ -470,8 +502,8 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		}
 	}
 
-	public void saveGame() {		
-	    SharedPreferences settings = getSharedPreferences("SAVEGAME", 0);
+	public void saveGame(String preffilename) {		
+	    SharedPreferences settings = getSharedPreferences(preffilename, 0);
 	    SharedPreferences.Editor editor = settings.edit();
 	    editor.putString("gmoves", Arrays.toString(squaremoves).replace("[", "").replace("]", "").replace(" ", ""));
 		editor.putBoolean("gameover", gameover);
@@ -484,13 +516,13 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    editor.commit();
 	}
 	
-	public void loadGame() {	
+	public void loadGame(String preffilename) {	
 				
 		String token = ",";
 		
 		boolean remsound = sound;
 		sound = false;
-        SharedPreferences settings = getSharedPreferences("SAVEGAME", 0);
+        SharedPreferences settings = getSharedPreferences(preffilename, 0);
         
         computeropponent = settings.getBoolean("vscomputer", computeropponent);
 	    CheckBox cb = (CheckBox) findViewById(R.id.checkBoxAI);
@@ -589,6 +621,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	        	Button button = (Button) findViewById(toechosen);
 	        	button.setText("");
 	     		button.getBackground().setColorFilter(new LightingColorFilter(0xFFF8F8F8, 0));
+	     		playToeGobeep();
 	         } 
 	    }, 1000); 
 	}
@@ -615,6 +648,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	        	 Button button = (Button) findViewById(toechosen);
 	        	 button.setText("T");
 	     		 button.getBackground().setColorFilter(new LightingColorFilter(0xFFEEEEEE, 0xFF00FF00));
+	     		 playToebeep();
 	         } 
 	    }, 1000); 
  	}
