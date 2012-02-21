@@ -8,8 +8,11 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.LightingColorFilter;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -26,6 +29,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +66,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
     public Random rand = new Random();
     //private static final String SERVLET_URL = "http://";
     public boolean online = false;
+    public final int buttonimages[] = {R.drawable.o, R.drawable.x, R.drawable.xxx, R.drawable.ooo, R.drawable.toe};
 	//private static final String TAG = "MyActivity"; 
 	
     /** Called when the activity is first created. */
@@ -87,6 +92,11 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    gamewin = sounds.load(this, R.raw.gamewin, 1);
 	    gametie = sounds.load(this, R.raw.gametie, 1);
 	    //music = MediaPlayer.create(context, R.raw.something);
+	    ImageButton imagebutton = (ImageButton) findViewById(R.id.imageButton1);  	    		
+	    Drawable da = getResources().getDrawable(R.drawable.x); 
+	    imagebutton.getLayoutParams().height = da.getMinimumHeight();
+	    imagebutton.getLayoutParams().width = da.getMinimumWidth();
+	    
 		showWhoseTurn();
 		showScore();
 		CheckBox cbAI =(CheckBox)findViewById(R.id.checkBoxAI);
@@ -156,7 +166,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
     
 	public void playOnline() {
 		online = true;
-		//DisableXOButtons
+		buttonsClickable(false);
 		//WaitForServletToSayItsYourMove
 	}
 	
@@ -178,6 +188,17 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		}
 	}
     
+	public void reportStats() {
+		//Update/InsertToPlayerTableRecordsTable()
+		//DeleteFromGamesTableMovesTable()
+	}
+	
+	public void changeImage(View view) {
+		int randomimage = rand.nextInt(buttonimages.length);	
+		ImageButton imagebutton = (ImageButton) findViewById(R.id.imageButton1);
+		imagebutton.setImageDrawable(getResources().getDrawable(buttonimages[randomimage]));	    
+	}
+	
     //When button is clicked
 	public void claimSquare(View view) {
 		if (gameover == true) {
@@ -232,6 +253,8 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		    			tv.setText("Player " + playername + " WINS!");
 		    			tvs.setText("Click Any Square To Start New Game");
 		    			gameover = true;
+		    			if (online)
+		    				reportStats();
 		    			return;
 		    		}
 		    		else {
@@ -241,6 +264,8 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		    				tscore += 1;
 		    				tvs.setText("Click Any Square To Start New Game");
 		    				gameover = true;
+		    				if (online)
+			    				reportStats();
 		    				return;
 		    			}
 		    		}

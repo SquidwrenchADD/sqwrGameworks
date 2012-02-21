@@ -132,19 +132,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
     </TableRow>
-
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-
-        <LinearLayout
-            android:id="@+id/linearLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" >
-        </LinearLayout>
-    </HorizontalScrollView>
     
     <TextView
         android:id="@+id/textView1"
@@ -168,16 +155,31 @@
         android:gravity = "center">
     </TextView>
 
-    <CheckBox
-        android:id="@+id/checkBoxAI"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Vs Computer" />
+    <TableRow
+      	android:id="@+id/TopRow2"
+      	android:layout_width="match_parent"
+      	android:layout_height="wrap_content"
+      	android:baselineAligned="true" >
+	        
+    	<CheckBox
+	        android:id="@+id/checkBoxAI"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Vs Computer" />
     
-    <CheckBox
-        android:id="@+id/checkBoxToe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Toe" />
-     
+    	<CheckBox
+	        android:id="@+id/checkBoxToe"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Toe" />
+	    
+    	<ImageButton
+	        android:id="@+id/imageButton1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:onClick="changeImage"
+	        android:src="@drawable/x" />
+		    
+    </TableRow>
+       
 </TableLayout>
