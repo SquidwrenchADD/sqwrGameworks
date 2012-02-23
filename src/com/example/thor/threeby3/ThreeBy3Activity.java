@@ -8,10 +8,8 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.LightingColorFilter;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -22,11 +20,11 @@ import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -67,15 +65,15 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
     //private static final String SERVLET_URL = "http://";
     public boolean online = false;
     public final int buttonimages[] = {R.drawable.o, R.drawable.x, R.drawable.xxx, R.drawable.ooo, R.drawable.toe};
+    public int viewWidth = 0;
+    public int viewHeight = 0;
+    public int orient;
 	//private static final String TAG = "MyActivity"; 
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);    
-        //TableLayout tl = (TableLayout) findViewById(R.id.TableLayout1);
-        //TableLayout.LayoutParams layoutParams = new TableLayout.LayoutParams(tl.getWidth(), tl.getWidth());
-        //tl.setLayoutParams(layoutParams);
         SharedPreferences settings = getSharedPreferences("PREF",0);
         sound = settings.getBoolean("sound", true);
 		sensMgr = (SensorManager)getSystemService(SENSOR_SERVICE);
@@ -92,10 +90,33 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    gamewin = sounds.load(this, R.raw.gamewin, 1);
 	    gametie = sounds.load(this, R.raw.gametie, 1);
 	    //music = MediaPlayer.create(context, R.raw.something);
-	    ImageButton imagebutton = (ImageButton) findViewById(R.id.imageButton1);  	    		
-	    Drawable da = getResources().getDrawable(R.drawable.x); 
-	    imagebutton.getLayoutParams().height = da.getMinimumHeight();
-	    imagebutton.getLayoutParams().width = da.getMinimumWidth();
+	    ImageButton imagebutton;
+	    Drawable da = getResources().getDrawable(R.drawable.blankgray);
+	    int dh = da.getMinimumHeight();
+	    int dw = da.getMinimumWidth();
+	    View view = (View) findViewById(R.id.TableLayout1);
+	    
+	    Display display = getWindowManager().getDefaultDisplay();
+	    Point size = new Point();
+	    display.getSize(size);
+	    int dwidth = size.x;
+	    int dheight = size.y;
+	    int setsize;
+	    if (dheight > dwidth) {
+	    	orient = 0; //vertical
+	    	setsize = dwidth/3;
+	    }
+	    else {
+	    	orient = 1; //horizontal
+	    	setsize = dheight/4;
+	    }
+	    
+	    for (Integer squareid : squares) {
+	    	imagebutton = (ImageButton) findViewById(squareid);
+    		imagebutton.getLayoutParams().height = setsize;
+    		imagebutton.getLayoutParams().width = setsize;
+	    	imagebutton.setTag(R.drawable.blankgray);
+	    }
 	    
 		showWhoseTurn();
 		showScore();
@@ -181,9 +202,9 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	}
 	
 	public void buttonsClickable(boolean clickable) {
-		Button button;
+		ImageButton button;
 		for (Integer squareid : squares) {
-			button = (Button) findViewById(squareid);
+			button = (ImageButton) findViewById(squareid);
 			button.setClickable(clickable);
 		}
 	}
@@ -193,11 +214,6 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		//DeleteFromGamesTableMovesTable()
 	}
 	
-	public void changeImage(View view) {
-		int randomimage = rand.nextInt(buttonimages.length);	
-		ImageButton imagebutton = (ImageButton) findViewById(R.id.imageButton1);
-		imagebutton.setImageDrawable(getResources().getDrawable(buttonimages[randomimage]));	    
-	}
 	
     //When button is clicked
 	public void claimSquare(View view) {
@@ -205,29 +221,30 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 			startOver();
 		}
 		else {
-	    	Button button = (Button)view;
-	    	if(button.getText().equals("")) {
+	    	ImageButton button = (ImageButton)view;
+	    	if(button.getTag().equals((Integer) R.drawable.blankgray)) {
 	    		int pvalue;
+	    		int dvalue;
 	    		if (toe) {
-	    			if  (moves == 2 || moves == 5) {
+	    			if  (moves == 2 || moves == 6) {
 	    				int randomsquare = rand.nextInt(squarestaken.size());
 	    				toechosen = squarestaken.get(randomsquare);
-	    				moveslimit += 1;
+	    				moveslimit += 2;
 	    			}
 	    		}
 	    		if (playername.equals("X")) {
 	    			pvalue = -1;
-	    			button.getBackground().setColorFilter(new LightingColorFilter(0xFFEEEEEE, 0xFFFF0000));
-	    	    	button.setText("X");
+	    			dvalue = R.drawable.x;
 	    		}
 	    		else {
 	    			pvalue = 1;
-	    			if (computeropponent == true)
-	    				button.setTextColor(0xFFA4C639);
-	    			button.getBackground().setColorFilter(new LightingColorFilter(0xFFEEEEEE, 0xFF0000FF));
-	    			button.setText("O");
-	    			//playObeep();
+	    			dvalue = R.drawable.o;
+//	    			if (computeropponent == true)
+//	    				button.setTextColor(0xFFA4C639);
 	    		}
+    			button.setBackgroundDrawable(getResources().getDrawable(dvalue));
+    			button.setTag(dvalue);
+    			
 	    		int squareid = view.getId();
 	    		
 	    		for (Integer sqtrio : inTrio[squares.indexOf(squareid)])
@@ -279,9 +296,9 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    		if (playername.equals("O") && computeropponent == true)
 	    			computerMove();    		
 	    		else if (toe) {	
-	    			if (moves == 3 || moves == 6)
+	    			if (moves == 3 || moves == 7)
 	    				playToe();
-	    			if (moves == 4 || moves == 7) 		
+	    			if (moves == 5 || moves == 9) 		
 	    				cleanToe();
 	    		} 
 	    		else if (online) {
@@ -329,12 +346,11 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	private void startOver() {
 		squaresremaining.clear();
 		Collections.addAll(squaresremaining, R.id.TopLeft,R.id.TopMiddle,R.id.TopRight,R.id.MiddleLeft,R.id.MiddleMiddle,R.id.MiddleRight,R.id.BottomLeft,R.id.BottomMiddle,R.id.BottomRight);
-		Button button;
+		ImageButton button;
 		for (Integer squareid : squaresremaining) {
-			button = (Button) findViewById(squareid);
-			button.setText("");
-			button.setTextColor(0xFF000000);
-			button.getBackground().setColorFilter(new LightingColorFilter(0xFFF8F8F8, 0));
+			button = (ImageButton) findViewById(squareid);
+			button.setBackgroundDrawable(getResources().getDrawable(R.drawable.blankgray));
+			button.setTag(R.drawable.blankgray);
 		}
 		gameover = false;
 		moves = 0;
@@ -350,12 +366,14 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		if (startingplayer.equals("O") && computeropponent == true)
 			computerMove();
 	}
+	
+	
+
+	
 
 	public void showScore() {
 		TextView tvs = (TextView) findViewById(R.id.textViewScore);
 		tvs.setText("Score:   X:" + xscore + "   O:" + oscore + "   Tie:" + tscore);
-		//String ss = Arrays.toString(pointcount);
-		//tvs.setText(moves + " " + ss);
 	}
 	
 	public void showWhoseTurn() {
@@ -377,12 +395,12 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	public void randomMove() {
 		int randomsquare = rand.nextInt(squaresremaining.size());
 		//int randomsquare = (int) Math.ceil(Math.random() * (squaresremaining.size() - 1));
-		Button button = (Button) findViewById(squaresremaining.get(randomsquare));
+		ImageButton button = (ImageButton) findViewById(squaresremaining.get(randomsquare));
     	button.performClick();		
 	}
 	
 	public void computerMove() {
-		Button button;
+		ImageButton button;
 		//alternate between easy mode and hard mode depending on who's winning
 		if (oscore >= xscore) { 
 		//dumb AI - random selection
@@ -392,7 +410,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		else { 
 		//smart AI 
 			if (squaresremaining.size() == 9) {
-      			button = (Button) findViewById(R.id.MiddleMiddle);
+      			button = (ImageButton) findViewById(R.id.MiddleMiddle);
       			button.performClick();
       			return;
 			}
@@ -400,8 +418,8 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				for (int q = 0; q < 8; q++) { //look for O about to win and complete
 					if (pointcount[q] == 2) {
 						for (Integer squareid : rcd[q]) {
-	      					button = (Button) findViewById(squareid);
-	      					if (button.getText().equals("")) {
+	      					button = (ImageButton) findViewById(squareid);
+	      					if (button.getTag().equals((Integer) R.drawable.blankgray)) {
 	      						button.performClick();
 	      						return;
 	      					}	
@@ -412,8 +430,8 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				for (int p = 0; p < 8; p++) { //look for X about to win and block
 					if (pointcount[p] == -2) {
 						for (Integer squareid : rcd[p]) {
-	      					button = (Button) findViewById(squareid);
-	      					if (button.getText().equals("")) {
+	      					button = (ImageButton) findViewById(squareid);
+	      					if (button.getTag().equals((Integer) R.drawable.blankgray)) {
 	      						button.performClick();
 	      						return;
 	      					}	
@@ -422,8 +440,8 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				}
 				
 				//take center if possible
-				button = (Button) findViewById(R.id.MiddleMiddle);
-      			if (button.getText().equals("")) {
+				button = (ImageButton) findViewById(R.id.MiddleMiddle);
+      			if (button.getTag().equals((Integer) R.drawable.blankgray)) {
       				button.performClick();
       				return;
       			}
@@ -431,8 +449,8 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				for (int d = 0; d < 8; d++) { //look for O with one and add to it
 					if (pointcount[d] == 1) {
 						for (Integer squareid : rcd[d]) {
-	      					button = (Button) findViewById(squareid);
-	      					if (button.getText().equals("")) {
+	      					button = (ImageButton) findViewById(squareid);
+	      					if (button.getTag().equals((Integer) R.drawable.blankgray)) {
 	      						button.performClick();
 	      						return;
 	      					}	
@@ -440,23 +458,23 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 					}
 				}
 				//take corner if possible
-				button = (Button) findViewById(R.id.TopLeft);
-      			if (button.getText().equals("")) {
+				button = (ImageButton) findViewById(R.id.TopLeft);
+      			if (button.getTag().equals((Integer) R.drawable.blankgray)) {
       				button.performClick();
       				return;
       			}
-      			button = (Button) findViewById(R.id.TopRight);
-      			if (button.getText().equals("")) {
+      			button = (ImageButton) findViewById(R.id.TopRight);
+      			if (button.getTag().equals((Integer) R.drawable.blankgray)) {
       				button.performClick();
       				return;
       			}
-      			button = (Button) findViewById(R.id.BottomLeft);
-      			if (button.getText().equals("")) {
+      			button = (ImageButton) findViewById(R.id.BottomLeft);
+      			if (button.getTag().equals((Integer) R.drawable.blankgray)) {
       				button.performClick();
       				return;
       			}
-      			button = (Button) findViewById(R.id.BottomRight);
-      			if (button.getText().equals("")) {
+      			button = (ImageButton) findViewById(R.id.BottomRight);
+      			if (button.getTag().equals((Integer) R.drawable.blankgray)) {
       				button.performClick();
       				return;
       			}
@@ -525,15 +543,15 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	public void buttonGlow(int winner) {
 		int glowcolor;
 		if (winner == 3)
-			glowcolor = 0xFF0000FF;
+			glowcolor = R.drawable.ooo;
 		else
-			glowcolor = 0xFFFF0000;
-		Button button;
+			glowcolor = R.drawable.xxx;
+		ImageButton button;
 		for (int p = 0; p < 8; p++) {
 			if (pointcount[p] == winner) {
 				for (Integer squareid : rcd[p]) {
-					button = (Button) findViewById(squareid);
-  					button.getBackground().setColorFilter(new LightingColorFilter(0xFF555555, glowcolor));
+					button = (ImageButton) findViewById(squareid);
+					button.setBackgroundDrawable(getResources().getDrawable(glowcolor));
 				}
 			}
 		}
@@ -555,139 +573,138 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	
 	public void loadGame(String preffilename) {	
 				
-		String token = ",";
-		
-		boolean remsound = sound;
-		sound = false;
-        SharedPreferences settings = getSharedPreferences(preffilename, 0);
-        
-        computeropponent = settings.getBoolean("vscomputer", computeropponent);
-	    CheckBox cb = (CheckBox) findViewById(R.id.checkBoxAI);
-		if (computeropponent) {
-			if (!cb.isChecked()) {
-				playername = "X";
-				cb.setChecked(true);
+    	try{
+
+			String token = ",";
+			
+			boolean remsound = sound;
+			sound = false;
+	        SharedPreferences settings = getSharedPreferences(preffilename, 0);
+	        
+	        computeropponent = settings.getBoolean("vscomputer", computeropponent);
+		    CheckBox cb = (CheckBox) findViewById(R.id.checkBoxAI);
+			if (computeropponent) {
+				if (!cb.isChecked()) {
+					playername = "X";
+					cb.setChecked(true);
+				}
 			}
-		}
-		else {
-			if (cb.isChecked())
-				cb.setChecked(false);
-		}
-		
-        toe = settings.getBoolean("toe", toe);
-	    CheckBox cbtoe = (CheckBox) findViewById(R.id.checkBoxToe);
-		if (toe) {
-			if (!cbtoe.isChecked()) {
-				cbtoe.setChecked(true);
+			else {
+				if (cb.isChecked())
+					cb.setChecked(false);
 			}
-		}
-		else {
-			if (cbtoe.isChecked())
-				cbtoe.setChecked(false);
-		}
-		
-		startOver();
-		
-		String smoves = settings.getString("gmoves", "");
-        int[] convertedIntArray = StringToArrayConverter.convertTokenizedStringToIntArray(smoves, token);
-        
-        boolean toehold = toe;
-        boolean comphold = computeropponent;
-                
-        toe = false;
-        computeropponent = false;
-    
-        Button button;
-        Integer mov;
-        for (int s = 0; s < 13; s++) {
-            mov = convertedIntArray[s];
-            if (mov == 0) 
-            	break;
-            if (mov < 0)
-            	playername = "X";
-            else
-            	playername = "O";
-            if (toehold) {
-            	if (moves == 3 || moves == 6) {
-	            	toechosen = convertedIntArray[s];
-	            	playToe();
-            	}
-            	else if (moves == 4 || moves == 7)
-            		cleanToe();
-            	else {
-            		button = (Button) findViewById(Math.abs(mov));
-    	        	button.performClick();
-            	}
-            }
-	        else {
-	        	button = (Button) findViewById(Math.abs(mov));
-	        	button.performClick();
+			
+	        toe = settings.getBoolean("toe", toe);
+		    CheckBox cbtoe = (CheckBox) findViewById(R.id.checkBoxToe);
+			if (toe) {
+				if (!cbtoe.isChecked()) {
+					cbtoe.setChecked(true);
+				}
+			}
+			else {
+				if (cbtoe.isChecked())
+					cbtoe.setChecked(false);
+			}
+			
+			startOver();
+			
+			String smoves = settings.getString("gmoves", "");
+	        int[] convertedIntArray = StringToArrayConverter.convertTokenizedStringToIntArray(smoves, token);
+	        
+	        boolean toehold = toe;
+	        boolean comphold = computeropponent;
+	                
+	        toe = false;
+	        computeropponent = false;
+	    
+	        ImageButton button;
+	        Integer mov;
+	        for (int s = 0; s < 13; s++) {
+	            mov = convertedIntArray[s];
+	            if (mov == 0) 
+	            	break;
+	            if (mov < 0)
+	            	playername = "X";
+	            else
+	            	playername = "O";
+	            if (toehold && (moves == 5 || moves == 9)) {
+	            	cleanToe();
+	            }
+	            if (toehold && (moves == 3 || moves == 7)) {
+	                toechosen = mov;
+		            moveslimit += 2;
+		            playToe();
+	            }
+	            else {
+	            	button = (ImageButton) findViewById(Math.abs(mov));
+	    	        button.performClick();
+	            }
 	        }
-        }
-        
-        sound = remsound;
-        toe = toehold;
-        computeropponent = comphold;
-        
-        xscore = Math.max(settings.getInt("xwins",xscore),xscore);
-        oscore = Math.max(settings.getInt("owins",oscore),oscore);
-        tscore = Math.max(settings.getInt("twins",tscore),tscore);
-        showScore();
-	
-		gameover = settings.getBoolean("gameover", gameover);
-		if (!gameover) {
-			playername = settings.getString("playername", playername);
-			showWhoseTurn();
-    		if (playername.equals("O") && computeropponent == true) {
-    			computerMove();		
-    		}
-		}
+	        
+	        sound = remsound;
+	        toe = toehold;
+	        computeropponent = comphold;
+	        
+	        xscore = Math.max(settings.getInt("xwins",xscore),xscore);
+	        oscore = Math.max(settings.getInt("owins",oscore),oscore);
+	        tscore = Math.max(settings.getInt("twins",tscore),tscore);
+	        showScore();
+		
+			gameover = settings.getBoolean("gameover", gameover);
+			if (!gameover) {
+				playername = settings.getString("playername", playername);
+				showWhoseTurn();
+	    		if (playername.equals("O") && computeropponent == true) {
+	    			computerMove();		
+	    		}
+			}
+
+    	}catch(NullPointerException e){
+    		startOver();
+    	}
 	}
 	
 	public void cleanToe() {
-//		Button button = (Button) findViewById(toechosen);
-//		button.getBackground().setColorFilter(new LightingColorFilter(0xFFF8F8F8, 0));
-//		button.setText("");
 		squaresremaining.add(new Integer(toechosen));
 		squarestaken.remove(new Integer(toechosen));
 		
 		// SLEEP 1 SEC
-	    Handler handler = new Handler(); 
-	    handler.postDelayed(new Runnable() { 
-	         public void run() { 
-	        	Button button = (Button) findViewById(toechosen);
-	        	button.setText("");
-	     		button.getBackground().setColorFilter(new LightingColorFilter(0xFFF8F8F8, 0));
+//	    Handler handler = new Handler(); 
+//	    handler.postDelayed(new Runnable() { 
+//	         public void run() { 
+	        	ImageButton button = (ImageButton) findViewById(toechosen);
+	     		button.setBackgroundDrawable(getResources().getDrawable(R.drawable.blankgray));
+	     		button.setTag(R.drawable.blankgray);
 	     		playToeGobeep();
-	         } 
-	    }, 1000); 
+//	         } 
+//	    }, 1000); 
 	}
 
 	public void playToe() {
-	 	Button button = (Button) findViewById(toechosen);
+	 	ImageButton button = (ImageButton) findViewById(toechosen);
 	 	int pvalue = 0;
-		if (button.getText().equals("X")) 
+		if (button.getTag().equals((Integer) R.drawable.x)) 
    			pvalue = 1;
-   		else if (button.getText().equals("O"))
+   		else if (button.getTag().equals((Integer) R.drawable.o))
    			pvalue = -1;
 		
 		for (Integer sqtrio : inTrio[squares.indexOf(toechosen)])
 			pointcount[sqtrio] += pvalue;
 		
 		squaremoves[moves] = toechosen;
-//		button.setText("T");
-//		button.getBackground().setColorFilter(new LightingColorFilter(0xFFEEEEEE, 0xFF00FF00));
+		moves += 1;
 		
 		// SLEEP 1 SEC
-	    Handler handler = new Handler(); 
-	    handler.postDelayed(new Runnable() { 
-	         public void run() { 
-	        	 Button button = (Button) findViewById(toechosen);
-	        	 button.setText("T");
-	     		 button.getBackground().setColorFilter(new LightingColorFilter(0xFFEEEEEE, 0xFF00FF00));
+//	    Handler handler = new Handler(); 
+//	    handler.postDelayed(new Runnable() { 
+//	         public void run() { 
+	        	 //popup(toechosen);
+	        	 button = (ImageButton) findViewById(toechosen);
+	        	 button.setBackgroundDrawable(getResources().getDrawable(R.drawable.toe));
+	        	 button.setTag(R.drawable.toe);
 	     		 playToebeep();
-	         } 
-	    }, 1000); 
+//		         } 
+//		    }, 1000); 
  	}
  }
  

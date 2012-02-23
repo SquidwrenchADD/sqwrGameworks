@@ -1,84 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/TableLayout1"
+<TableLayout android:id="@+id/TableLayout1"
     android:layout_width="fill_parent"
-    android:layout_height="400dp" >
+    android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TableRow
         android:id="@+id/TopRow"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:baselineAligned="false" >
+        android:layout_gravity="center"
+        android:baselineAligned="true"
+        android:gravity="center" >
 
-        <Button      
+        <ImageButton
             android:id="@+id/TopLeft"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_width="fill_parent"
             android:onClick="claimSquare"
-            android:textSize="50sp"
-            android:textStyle="bold"
-            android:text="" />
+            android:adjustViewBounds="true"
+            android:background="@drawable/blankgray" />
 
-        <Button 
+        <ImageButton
             android:id="@+id/TopMiddle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_width="fill_parent"
             android:onClick="claimSquare"
-            android:textSize="50sp"
-            android:textStyle="bold"
-            android:text="" />
+            android:adjustViewBounds="true"
+            android:background="@drawable/blankgray" />
 
-        <Button
+        <ImageButton
             android:id="@+id/TopRight"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_width="fill_parent"
             android:onClick="claimSquare"
-            android:textSize="50sp"
-            android:textStyle="bold"
-            android:text="" />
-
+            android:adjustViewBounds="true"
+            android:background="@drawable/blankgray" />
     </TableRow>
 
     <TableRow
         android:id="@+id/MiddleRow"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center" >
 
-        <Button
+        <ImageButton
             android:id="@+id/MiddleLeft"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_width="fill_parent"
             android:onClick="claimSquare"
-            android:textSize="50sp"
-            android:textStyle="bold"
-            android:text="" />
+            android:adjustViewBounds="true"
+            android:background="@drawable/blankgray" />
 
-        <Button
+        <ImageButton
             android:id="@+id/MiddleMiddle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_width="fill_parent"
             android:onClick="claimSquare"
-            android:textSize="50sp"
-            android:textStyle="bold"
-            android:text="" />
+            android:adjustViewBounds="true"
+            android:background="@drawable/blankgray" />
 
-        <Button
+        <ImageButton
             android:id="@+id/MiddleRight"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_width="fill_parent"            
             android:onClick="claimSquare"
-            android:textSize="50sp"
-            android:textStyle="bold"
-            android:text="" />
-
+            android:adjustViewBounds="true"
+            android:background="@drawable/blankgray" />
     </TableRow>
 
     <TableRow
@@ -90,96 +75,67 @@
     <TableRow
         android:id="@+id/BottomRow"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:baselineAligned="false"
-        android:gravity="bottom" >
+        android:gravity="bottom|center" >
 
-        <Button
+        <ImageButton
             android:id="@+id/BottomLeft"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_width="fill_parent"            
             android:onClick="claimSquare"
-            android:textSize="50sp"
-            android:textStyle="bold"
-            android:text="" />
+            android:adjustViewBounds="true"
+            android:background="@drawable/blankgray" />
 
-        <Button
+        <ImageButton
             android:id="@+id/BottomMiddle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_width="fill_parent"            
             android:onClick="claimSquare"
-            android:textSize="50sp"
-            android:textStyle="bold"
-            android:text="" />
+            android:adjustViewBounds="true"
+            android:background="@drawable/blankgray" />
 
-        <Button
+        <ImageButton
             android:id="@+id/BottomRight"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_width="fill_parent"            
             android:onClick="claimSquare"
-            android:textSize="50sp"
-            android:textStyle="bold"
-            android:text="" />
+            android:adjustViewBounds="true"
+            android:background="@drawable/blankgray" />
 
     </TableRow>
 
-    <TableRow
-        android:id="@+id/tableRow2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-    </TableRow>
-    
     <TextView
         android:id="@+id/textView1"
-        android:background="#FFFFFFFF" 
-        android:textColor="#FF000000"
-        android:layout_weight="0.8"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity = "center">
+        android:background="#FFFFFFFF"
+        android:gravity="center"
+        android:textColor="#FF000000" >
     </TextView>
     
     <TextView
         android:id="@+id/textViewScore"
-        android:background="#FFFFFFFF" 
-        android:textColor="#FF000000"
-        android:layout_weight="0.8"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity = "center">
+        android:background="#FFFFFFFF"
+        android:gravity="center"
+        android:textColor="#FF000000" >
     </TextView>
-
-    <TableRow
-      	android:id="@+id/TopRow2"
-      	android:layout_width="match_parent"
-      	android:layout_height="wrap_content"
-      	android:baselineAligned="true" >
-	        
-    	<CheckBox
-	        android:id="@+id/checkBoxAI"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="Vs Computer" />
     
-    	<CheckBox
-	        android:id="@+id/checkBoxToe"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="Toe" />
-	    
-    	<ImageButton
-	        android:id="@+id/imageButton1"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:onClick="changeImage"
-	        android:src="@drawable/x" />
-		    
-    </TableRow>
-       
+    <CheckBox
+            android:id="@+id/checkBoxAI"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vs Computer" />
+    
+    <CheckBox
+            android:id="@+id/checkBoxToe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Toe" />
+    
 </TableLayout>
