@@ -64,7 +64,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
     public Random rand = new Random();
     //private static final String SERVLET_URL = "http://";
     public boolean online = false;
-    public final int buttonimages[] = {R.drawable.o, R.drawable.x, R.drawable.xxx, R.drawable.ooo, R.drawable.toe};
+    //public final int buttonimages[] = {R.drawable.bigo, R.drawable.bigx, R.drawable.bigxxx, R.drawable.bigooo, R.drawable.bigtoe};
     public int viewWidth = 0;
     public int viewHeight = 0;
     public int orient;
@@ -90,12 +90,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    gamewin = sounds.load(this, R.raw.gamewin, 1);
 	    gametie = sounds.load(this, R.raw.gametie, 1);
 	    //music = MediaPlayer.create(context, R.raw.something);
-	    ImageButton imagebutton;
-	    Drawable da = getResources().getDrawable(R.drawable.blankgray);
-	    int dh = da.getMinimumHeight();
-	    int dw = da.getMinimumWidth();
-	    View view = (View) findViewById(R.id.TableLayout1);
-	    
+    
 	    Display display = getWindowManager().getDefaultDisplay();
 	    Point size = new Point();
 	    display.getSize(size);
@@ -110,12 +105,12 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    	orient = 1; //horizontal
 	    	setsize = dheight/4;
 	    }
-	    
+	    ImageButton imagebutton;
 	    for (Integer squareid : squares) {
 	    	imagebutton = (ImageButton) findViewById(squareid);
     		imagebutton.getLayoutParams().height = setsize;
     		imagebutton.getLayoutParams().width = setsize;
-	    	imagebutton.setTag(R.drawable.blankgray);
+	    	imagebutton.setTag(R.drawable.biggray);
 	    }
 	    
 		showWhoseTurn();
@@ -222,7 +217,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		}
 		else {
 	    	ImageButton button = (ImageButton)view;
-	    	if(button.getTag().equals((Integer) R.drawable.blankgray)) {
+	    	if(button.getTag().equals((Integer) R.drawable.biggray)) {
 	    		int pvalue;
 	    		int dvalue;
 	    		if (toe) {
@@ -234,11 +229,11 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    		}
 	    		if (playername.equals("X")) {
 	    			pvalue = -1;
-	    			dvalue = R.drawable.x;
+	    			dvalue = R.drawable.bigx;
 	    		}
 	    		else {
 	    			pvalue = 1;
-	    			dvalue = R.drawable.o;
+	    			dvalue = R.drawable.bigo;
 //	    			if (computeropponent == true)
 //	    				button.setTextColor(0xFFA4C639);
 	    		}
@@ -349,8 +344,8 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		ImageButton button;
 		for (Integer squareid : squaresremaining) {
 			button = (ImageButton) findViewById(squareid);
-			button.setBackgroundDrawable(getResources().getDrawable(R.drawable.blankgray));
-			button.setTag(R.drawable.blankgray);
+			button.setBackgroundDrawable(getResources().getDrawable(R.drawable.biggray));
+			button.setTag(R.drawable.biggray);
 		}
 		gameover = false;
 		moves = 0;
@@ -419,7 +414,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 					if (pointcount[q] == 2) {
 						for (Integer squareid : rcd[q]) {
 	      					button = (ImageButton) findViewById(squareid);
-	      					if (button.getTag().equals((Integer) R.drawable.blankgray)) {
+	      					if (button.getTag().equals((Integer) R.drawable.biggray)) {
 	      						button.performClick();
 	      						return;
 	      					}	
@@ -431,7 +426,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 					if (pointcount[p] == -2) {
 						for (Integer squareid : rcd[p]) {
 	      					button = (ImageButton) findViewById(squareid);
-	      					if (button.getTag().equals((Integer) R.drawable.blankgray)) {
+	      					if (button.getTag().equals((Integer) R.drawable.biggray)) {
 	      						button.performClick();
 	      						return;
 	      					}	
@@ -441,7 +436,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				
 				//take center if possible
 				button = (ImageButton) findViewById(R.id.MiddleMiddle);
-      			if (button.getTag().equals((Integer) R.drawable.blankgray)) {
+      			if (button.getTag().equals((Integer) R.drawable.biggray)) {
       				button.performClick();
       				return;
       			}
@@ -450,7 +445,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 					if (pointcount[d] == 1) {
 						for (Integer squareid : rcd[d]) {
 	      					button = (ImageButton) findViewById(squareid);
-	      					if (button.getTag().equals((Integer) R.drawable.blankgray)) {
+	      					if (button.getTag().equals((Integer) R.drawable.biggray)) {
 	      						button.performClick();
 	      						return;
 	      					}	
@@ -459,22 +454,22 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				}
 				//take corner if possible
 				button = (ImageButton) findViewById(R.id.TopLeft);
-      			if (button.getTag().equals((Integer) R.drawable.blankgray)) {
+      			if (button.getTag().equals((Integer) R.drawable.biggray)) {
       				button.performClick();
       				return;
       			}
       			button = (ImageButton) findViewById(R.id.TopRight);
-      			if (button.getTag().equals((Integer) R.drawable.blankgray)) {
+      			if (button.getTag().equals((Integer) R.drawable.biggray)) {
       				button.performClick();
       				return;
       			}
       			button = (ImageButton) findViewById(R.id.BottomLeft);
-      			if (button.getTag().equals((Integer) R.drawable.blankgray)) {
+      			if (button.getTag().equals((Integer) R.drawable.biggray)) {
       				button.performClick();
       				return;
       			}
       			button = (ImageButton) findViewById(R.id.BottomRight);
-      			if (button.getTag().equals((Integer) R.drawable.blankgray)) {
+      			if (button.getTag().equals((Integer) R.drawable.biggray)) {
       				button.performClick();
       				return;
       			}
@@ -543,9 +538,9 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	public void buttonGlow(int winner) {
 		int glowcolor;
 		if (winner == 3)
-			glowcolor = R.drawable.ooo;
+			glowcolor = R.drawable.bigooo;
 		else
-			glowcolor = R.drawable.xxx;
+			glowcolor = R.drawable.bigxxx;
 		ImageButton button;
 		for (int p = 0; p < 8; p++) {
 			if (pointcount[p] == winner) {
@@ -673,8 +668,8 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 //	    handler.postDelayed(new Runnable() { 
 //	         public void run() { 
 	        	ImageButton button = (ImageButton) findViewById(toechosen);
-	     		button.setBackgroundDrawable(getResources().getDrawable(R.drawable.blankgray));
-	     		button.setTag(R.drawable.blankgray);
+	     		button.setBackgroundDrawable(getResources().getDrawable(R.drawable.biggray));
+	     		button.setTag(R.drawable.biggray);
 	     		playToeGobeep();
 //	         } 
 //	    }, 1000); 
@@ -683,9 +678,9 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	public void playToe() {
 	 	ImageButton button = (ImageButton) findViewById(toechosen);
 	 	int pvalue = 0;
-		if (button.getTag().equals((Integer) R.drawable.x)) 
+		if (button.getTag().equals((Integer) R.drawable.bigx)) 
    			pvalue = 1;
-   		else if (button.getTag().equals((Integer) R.drawable.o))
+   		else if (button.getTag().equals((Integer) R.drawable.bigo))
    			pvalue = -1;
 		
 		for (Integer sqtrio : inTrio[squares.indexOf(toechosen)])
@@ -698,10 +693,9 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 //	    Handler handler = new Handler(); 
 //	    handler.postDelayed(new Runnable() { 
 //	         public void run() { 
-	        	 //popup(toechosen);
 	        	 button = (ImageButton) findViewById(toechosen);
-	        	 button.setBackgroundDrawable(getResources().getDrawable(R.drawable.toe));
-	        	 button.setTag(R.drawable.toe);
+	        	 button.setBackgroundDrawable(getResources().getDrawable(R.drawable.bigtoe));
+	        	 button.setTag(R.drawable.bigtoe);
 	     		 playToebeep();
 //		         } 
 //		    }, 1000); 

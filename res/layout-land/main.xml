@@ -28,21 +28,21 @@
 					android:layout_height="fill_parent"
 		            android:onClick="claimSquare"
 		            android:adjustViewBounds="true"
-		            android:background="@drawable/blankgray" />
+		            android:background="@drawable/biggray" />
 		
 		        <ImageButton 
 		            android:id="@+id/TopMiddle"
 		            android:layout_height="fill_parent"
 		            android:onClick="claimSquare"
 		            android:adjustViewBounds="true"
-		            android:background="@drawable/blankgray" />
+		            android:background="@drawable/biggray" />
 		
 		        <ImageButton
 		            android:id="@+id/TopRight"
 		            android:layout_height="fill_parent"
 		            android:onClick="claimSquare"
 		            android:adjustViewBounds="true"
-		            android:background="@drawable/blankgray" />
+		            android:background="@drawable/biggray" />
 		
 		    </TableRow>
 		
@@ -58,21 +58,21 @@
 		            android:layout_height="fill_parent"
 		            android:onClick="claimSquare"
 		            android:adjustViewBounds="true"
-		            android:background="@drawable/blankgray" />
+		            android:background="@drawable/biggray" />
 		
 		        <ImageButton
 		            android:id="@+id/MiddleMiddle"
 		            android:layout_height="fill_parent"
 		            android:onClick="claimSquare"
 		            android:adjustViewBounds="true"
-		            android:background="@drawable/blankgray" />
+		            android:background="@drawable/biggray" />
 		
 		        <ImageButton
 		            android:id="@+id/MiddleRight"
 		            android:layout_width="fill_parent"
 		            android:onClick="claimSquare"
 		            android:adjustViewBounds="true"
-		            android:background="@drawable/blankgray" />
+		            android:background="@drawable/biggray" />
 		
 		    </TableRow>
 		
@@ -89,21 +89,21 @@
 		            android:layout_width="fill_parent"
 		            android:onClick="claimSquare"
 		            android:adjustViewBounds="true"
-		            android:background="@drawable/blankgray" />
+		            android:background="@drawable/biggray" />
 		
 		        <ImageButton
 		            android:id="@+id/BottomMiddle"
 		            android:layout_width="fill_parent"
 		            android:onClick="claimSquare"
 		            android:adjustViewBounds="true"
-		            android:background="@drawable/blankgray" />
+		            android:background="@drawable/biggray" />
 		
 		        <ImageButton
 		            android:id="@+id/BottomRight"
 		            android:layout_height="fill_parent"
 		            android:onClick="claimSquare"
 		            android:adjustViewBounds="true"
-		            android:background="@drawable/blankgray" />
+		            android:background="@drawable/biggray" />
 		
 		    </TableRow>
 		    <TableRow
