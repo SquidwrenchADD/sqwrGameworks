@@ -93,10 +93,12 @@ public class TicTacToe extends Activity implements SensorEventListener {
 	    //music = MediaPlayer.create(context, R.raw.something);
     
 	    Display display = getWindowManager().getDefaultDisplay();
-	    Point size = new Point();
-	    display.getSize(size);
-	    int dwidth = size.x;
-	    int dheight = size.y;
+	    //Point size = new Point();
+	    //display.getSize(size);
+	    //int dwidth = size.x;
+	    //int dheight = size.y;
+	    int dwidth = display.getWidth();
+	    int dheight = display.getHeight();
 	    int setsize;
 	    if (dheight > dwidth) {
 	    	orient = 0; //vertical
