@@ -1,4 +1,4 @@
-package com.example.thor.threeby3;
+package org.squidwrench.gameworks.tictactoe;
 
 import java.util.StringTokenizer;
 

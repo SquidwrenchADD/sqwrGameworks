@@ -1,4 +1,4 @@
-package com.example.thor.threeby3;
+package org.squidwrench.gameworks.tictactoe;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,7 +22,7 @@ public class Splash extends Activity{
 				} catch(InterruptedException e) {
 					e.printStackTrace();
 				} finally {
-					Intent openStartingPoint = new Intent("com.example.thor.threeby3.THREEBY3ACTIVITY");
+					Intent openStartingPoint = new Intent("org.squidwrench.gameworks.tictactoe.TICTACTOE");
 					startActivity(openStartingPoint);
 				}
 			}

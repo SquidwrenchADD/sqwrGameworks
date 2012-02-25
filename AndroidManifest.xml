@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.thor.threeby3"
+    package="org.squidwrench.gameworks.tictactoe"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -10,7 +10,7 @@
         android:icon="@drawable/ttticon"
         android:label="@string/app_name" >
         <activity
-            android:name=".Splash"
+            android:name="org.squidwrench.gameworks.tictactoe.Splash"
             android:label="@string/app_name">
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
@@ -18,10 +18,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ThreeBy3Activity"
+            android:name="org.squidwrench.gameworks.tictactoe.TicTacToe"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="com.example.thor.threeby3.THREEBY3ACTIVITY" />
+                <action android:name="org.squidwrench.gameworks.tictactoe.TICTACTOE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
