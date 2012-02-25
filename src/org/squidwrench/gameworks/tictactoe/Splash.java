@@ -12,10 +12,11 @@ public class Splash extends Activity{
 	@Override
 	protected void onCreate(Bundle TTTTime) {
 		super.onCreate(TTTTime);
-		splashMusic = MediaPlayer.create(Splash.this, R.raw.tttsplashsound);
-		splashMusic.start();
 		setContentView(R.layout.splash);
+		splashMusic = MediaPlayer.create(Splash.this, R.raw.splashsound);
+		splashMusic.start();
 		Thread timer = new Thread(){
+			@Override
 			public void run(){
 				try{
 					sleep(3000);
