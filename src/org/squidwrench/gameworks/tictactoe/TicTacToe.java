@@ -542,6 +542,7 @@ public class TicTacToe extends Activity implements SensorEventListener {
 			startOver();
 			
 			String smoves = settings.getString("gmoves", "");
+			if(smoves == "") return;
 	        int[] convertedIntArray = StringToArrayConverter.convertTokenizedStringToIntArray(smoves, token);
 	        
 	        boolean toehold = toe;
