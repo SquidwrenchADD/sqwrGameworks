@@ -68,7 +68,7 @@ public class TicTacToe extends Activity implements SensorEventListener {
     //public final int buttonimages[] = {R.drawable.bigo, R.drawable.bigx, R.drawable.bigxxx, R.drawable.bigooo, R.drawable.bigtoe};
     public int viewWidth = 0;
     public int viewHeight = 0;
-    public int orient;
+    public int orient; //0 = vertical, 1 = horizontal
 	//private static final String TAG = "MyActivity"; 
 	
     /** Called when the activity is first created. */
@@ -153,14 +153,42 @@ public class TicTacToe extends Activity implements SensorEventListener {
 	    });     
     }
     
+    public int findOrientation() {
+	    Display display = getWindowManager().getDefaultDisplay();
+	    if (display.getHeight() > display.getWidth()) {
+	    	orient = 0; //vertical
+	    	return 0;
+	    }
+	    else {
+	    	orient = 1; //horizontal
+	    	return 1;
+	    }
+    }
+    
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+      savedInstanceState.putString("gmoves", Arrays.toString(squaremoves).replace("[", "").replace("]", "").replace(" ", ""));
+      savedInstanceState.putBoolean("gameover", gameover);
+      savedInstanceState.putString("playername", playername);
+      savedInstanceState.putBoolean("vscomputer", computeropponent);
+      savedInstanceState.putBoolean("toe", toe);
+      savedInstanceState.putInt("xwins", xscore);
+      savedInstanceState.putInt("owins", oscore);
+      savedInstanceState.putInt("twins", tscore);   
+      super.onSaveInstanceState(savedInstanceState);
+    }
+    
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+      super.onRestoreInstanceState(savedInstanceState);
+      // Restore UI state from the savedInstanceState.
+      // This bundle has also been passed to onCreate.
+      loadGame(savedInstanceState.getString("gmoves"),savedInstanceState.getBoolean("gameover"),savedInstanceState.getString("playername"),savedInstanceState.getBoolean("vscomputer"),savedInstanceState.getBoolean("toe"),savedInstanceState.getInt("xwins"),savedInstanceState.getInt("owins"),savedInstanceState.getInt("twins"));
+    }
+    
     @Override
 	protected void onResume() {
     	super.onResume();
-    	try{
-    		loadGame("ORIENTHOLD");
-    	}catch(NullPointerException e){
-    		startOver();
-    	}
     	sensMgr.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
     
@@ -168,14 +196,9 @@ public class TicTacToe extends Activity implements SensorEventListener {
     @Override
 	protected void onPause() {
     	super.onPause();
-    	saveGame("ORIENTHOLD");
     	sensMgr.unregisterListener(this);
     }
     
-    @Override
-	protected void onSaveInstanceState (Bundle outState) {
-    	
-    }
     
 	public void playOnlineRegister() {
 		//createGameKey
@@ -332,7 +355,8 @@ public class TicTacToe extends Activity implements SensorEventListener {
     			saveGame("SAVEGAME");
     			return true;
     		case R.id.loadGame:
-    			loadGame("SAVEGAME");
+    			SharedPreferences settings = getSharedPreferences("SAVEGAME", 0);        
+       			loadGame(settings.getString("gmoves",""),settings.getBoolean("gameover",gameover),settings.getString("playername",playername),settings.getBoolean("vscomputer",computeropponent),settings.getBoolean("toe",toe),settings.getInt("xwins",xscore),settings.getInt("owins",oscore),settings.getInt("twins",tscore));
     			return true;
     		default:
     			return super.onOptionsItemSelected(item);
@@ -503,18 +527,16 @@ public class TicTacToe extends Activity implements SensorEventListener {
 	    editor.putInt("twins", tscore);
 	    editor.commit();
 	}
-	
-	public void loadGame(String preffilename) {	
-				
+		  
+	public void loadGame(String lmoves, boolean lgameover, String lplayername, boolean lvscomputer, boolean ltoe, int lxwins, int lowins, int ltwins) { 
     	try{
 
 			String token = ",";
 			
 			boolean remsound = sound;
 			sound = false;
-	        SharedPreferences settings = getSharedPreferences(preffilename, 0);
-	        
-	        computeropponent = settings.getBoolean("vscomputer", computeropponent);
+	        	        
+	        computeropponent = lvscomputer;
 		    CheckBox cb = (CheckBox) findViewById(R.id.checkBoxAI);
 			if (computeropponent) {
 				if (!cb.isChecked()) {
@@ -527,7 +549,7 @@ public class TicTacToe extends Activity implements SensorEventListener {
 					cb.setChecked(false);
 			}
 			
-	        toe = settings.getBoolean("toe", toe);
+	        toe = ltoe;
 		    CheckBox cbtoe = (CheckBox) findViewById(R.id.checkBoxToe);
 			if (toe) {
 				if (!cbtoe.isChecked()) {
@@ -541,7 +563,7 @@ public class TicTacToe extends Activity implements SensorEventListener {
 			
 			startOver();
 			
-			String smoves = settings.getString("gmoves", "");
+			String smoves = lmoves;
 			if(smoves == "") return;
 	        int[] convertedIntArray = StringToArrayConverter.convertTokenizedStringToIntArray(smoves, token);
 	        
@@ -579,14 +601,14 @@ public class TicTacToe extends Activity implements SensorEventListener {
 	        toe = toehold;
 	        computeropponent = comphold;
 	        
-	        xscore = Math.max(settings.getInt("xwins",xscore),xscore);
-	        oscore = Math.max(settings.getInt("owins",oscore),oscore);
-	        tscore = Math.max(settings.getInt("twins",tscore),tscore);
+	        xscore = Math.max(lxwins,xscore);
+	        oscore = Math.max(lowins,oscore);
+	        tscore = Math.max(ltwins,tscore);
 	        showScore();
 		
-			gameover = settings.getBoolean("gameover", gameover);
+			gameover = lgameover;
 			if (!gameover) {
-				playername = settings.getString("playername", playername);
+				playername = lplayername;
 				showWhoseTurn();
 	    		if (playername.equals("O") && computeropponent == true) {
 	    			computerMove();		
