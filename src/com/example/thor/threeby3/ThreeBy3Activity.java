@@ -68,7 +68,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
     //public final int buttonimages[] = {R.drawable.bigo, R.drawable.bigx, R.drawable.bigxxx, R.drawable.bigooo, R.drawable.bigtoe};
     public int viewWidth = 0;
     public int viewHeight = 0;
-    public int orient;
+    public int orient; //0 = vertical, 1 = horizontal
 	//private static final String TAG = "MyActivity"; 
 	
     /** Called when the activity is first created. */
@@ -149,6 +149,20 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    			startOver();
 	    	}
 	    });     
+    }
+    
+    public int findOrientation() {
+	    Display display = getWindowManager().getDefaultDisplay();
+	    Point size = new Point();
+	    display.getSize(size);
+	    if (size.y > size.x) {
+	    	orient = 0; //vertical
+	    	return 0;
+	    }
+	    else {
+	    	orient = 1; //horizontal
+	    	return 1;
+	    }
     }
     
     @Override
