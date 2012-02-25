@@ -50,6 +50,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	public final int mls[] = {1,3}, mms[] = {1,4,6,7}, mrs[] = {1,5};
 	public final int bls[] = {2,3,7}, bms[] = {2,4}, brs[] = {2,5,6};
 	public final int inTrio[][] = {tls,tms,trs,mls,mms,mrs,bls,bms,brs};
+	public final int corners[] = {R.id.TopLeft,R.id.TopRight,R.id.BottomLeft,R.id.BottomRight};
 	public final List<Integer> squares = new ArrayList<Integer>(Arrays.asList(R.id.TopLeft,R.id.TopMiddle,R.id.TopRight,R.id.MiddleLeft,R.id.MiddleMiddle,R.id.MiddleRight,R.id.BottomLeft,R.id.BottomMiddle,R.id.BottomRight)); //TL,TM,TR,ML,MM,MR,BL,BM,BR
 	public List<Integer> squaresremaining = new ArrayList<Integer>(Arrays.asList(R.id.TopLeft,R.id.TopMiddle,R.id.TopRight,R.id.MiddleLeft,R.id.MiddleMiddle,R.id.MiddleRight,R.id.BottomLeft,R.id.BottomMiddle,R.id.BottomRight)); //TL,TM,TR,ML,MM,MR,BL,BM,BR
 	public List<Integer> squarestaken = new ArrayList<Integer>(); //TL,TM,TR,ML,MM,MR,BL,BM,BR
@@ -234,8 +235,6 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	    		else {
 	    			pvalue = 1;
 	    			dvalue = R.drawable.bigo;
-//	    			if (computeropponent == true)
-//	    				button.setTextColor(0xFFA4C639);
 	    		}
     			button.setBackgroundDrawable(getResources().getDrawable(dvalue));
     			button.setTag(dvalue);
@@ -253,7 +252,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 				TextView tvs = (TextView) findViewById(R.id.textViewScore);
 				if (moves > 4) {
 		    		if (checkForWinCondition()) {
-		    			playGamewin();
+		    			playSound(gamewin);
 		    			buttonGlow(pvalue * 3);
 		    			if (playername.equals("X"))
 		    				xscore += 1;
@@ -271,7 +270,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		    		}
 		    		else {
 		    			if (moves == moveslimit) {
-		    				playGametie();
+		    				playSound(gametie);
 		    				tv.setText("Game Over: Tie");
 		    				tscore += 1;
 		    				tvs.setText("Click Any Square To Start New Game");
@@ -283,9 +282,9 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		    		}
 				}
 	    		if (playername.equals("X"))
-	    			playXbeep();
+	    			playSound(xbeep);
 	    		else
-	    			playObeep();
+	    			playSound(obeep);
 	    		playername = (playername.equals("X")) ? "O" : "X";
 	    		showWhoseTurn();
 	    		if (playername.equals("O") && computeropponent == true)
@@ -362,9 +361,6 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 			computerMove();
 	}
 	
-	
-
-	
 
 	public void showScore() {
 		TextView tvs = (TextView) findViewById(R.id.textViewScore);
@@ -394,6 +390,22 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
     	button.performClick();		
 	}
 	
+	public boolean scanBoard(int targetvalue) {
+		ImageButton button;
+		for (int q = 0; q < 8; q++) { //look for scenario and deal with it
+			if (pointcount[q] == targetvalue) {
+				for (Integer squareid : rcd[q]) {
+  					button = (ImageButton) findViewById(squareid);
+  					if (button.getTag().equals((Integer) R.drawable.biggray)) {
+  						button.performClick();
+  						return true;
+  					}	
+				}
+			}
+		}
+		return false;
+	}
+	
 	public void computerMove() {
 		ImageButton button;
 		//alternate between easy mode and hard mode depending on who's winning
@@ -410,29 +422,8 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
       			return;
 			}
 			else {
-				for (int q = 0; q < 8; q++) { //look for O about to win and complete
-					if (pointcount[q] == 2) {
-						for (Integer squareid : rcd[q]) {
-	      					button = (ImageButton) findViewById(squareid);
-	      					if (button.getTag().equals((Integer) R.drawable.biggray)) {
-	      						button.performClick();
-	      						return;
-	      					}	
-						}
-					}
-				}
-				
-				for (int p = 0; p < 8; p++) { //look for X about to win and block
-					if (pointcount[p] == -2) {
-						for (Integer squareid : rcd[p]) {
-	      					button = (ImageButton) findViewById(squareid);
-	      					if (button.getTag().equals((Integer) R.drawable.biggray)) {
-	      						button.performClick();
-	      						return;
-	      					}	
-						}
-					}
-				}
+				if (scanBoard(2)) return; //look for O about to win and complete
+				if (scanBoard(-2)) return; //look for X about to win and block
 				
 				//take center if possible
 				button = (ImageButton) findViewById(R.id.MiddleMiddle);
@@ -441,38 +432,16 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
       				return;
       			}
       			
-				for (int d = 0; d < 8; d++) { //look for O with one and add to it
-					if (pointcount[d] == 1) {
-						for (Integer squareid : rcd[d]) {
-	      					button = (ImageButton) findViewById(squareid);
-	      					if (button.getTag().equals((Integer) R.drawable.biggray)) {
-	      						button.performClick();
-	      						return;
-	      					}	
-						}
-					}
-				}
-				//take corner if possible
-				button = (ImageButton) findViewById(R.id.TopLeft);
-      			if (button.getTag().equals((Integer) R.drawable.biggray)) {
-      				button.performClick();
-      				return;
+      			if (scanBoard(1)) return; //look for O with one and add to it
+      			
+      			for (int c = 0; c < 4; c++) { //take corner if possible
+  					button = (ImageButton) findViewById(corners[c]);
+  					if (button.getTag().equals((Integer) R.drawable.biggray)) {
+  						button.performClick();
+  						return;
+  					}	
       			}
-      			button = (ImageButton) findViewById(R.id.TopRight);
-      			if (button.getTag().equals((Integer) R.drawable.biggray)) {
-      				button.performClick();
-      				return;
-      			}
-      			button = (ImageButton) findViewById(R.id.BottomLeft);
-      			if (button.getTag().equals((Integer) R.drawable.biggray)) {
-      				button.performClick();
-      				return;
-      			}
-      			button = (ImageButton) findViewById(R.id.BottomRight);
-      			if (button.getTag().equals((Integer) R.drawable.biggray)) {
-      				button.performClick();
-      				return;
-      			}
+
       			//might not ever get here
       			randomMove();
 			}
@@ -498,41 +467,10 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 		trashTalk.start();
 	    //sounds.play(computerwintrashtalk, 1, 1, 1, 0, 1);
 	}
-
-	public static void playXbeep() {
+ 	
+	public static void playSound(int soundid) {
 	    if (!sound) return; // if sound is turned off no need to continue
-	    	sounds.play(xbeep, 1, 1, 1, 0, 1);
-		//xbeep.start();
-	}
-	
-	public static void playObeep() {
-	    if (!sound) return; // if sound is turned off no need to continue
-	    	sounds.play(obeep, 1, 1, 1, 0, 1);
-	    //obeep.start();
-	}
-	
-	public static void playToebeep() {
-	    if (!sound) return; // if sound is turned off no need to continue
-	    	sounds.play(toebeep, 1, 1, 1, 0, 1);
-	    //obeep.start();
-	}
-	
-	public static void playToeGobeep() {
-	    if (!sound) return; // if sound is turned off no need to continue
-	    	sounds.play(toebeep, 1, 1, 1, 0, 1);
-	    //obeep.start();
-	}
-	
-	public static void playGamewin() {
-	    if (!sound) return; // if sound is turned off no need to continue
-	    	sounds.play(gamewin, 1, 1, 1, 0, 1);
-	    //obeep.start();
-	}
-	
-	public static void playGametie() {
-	    if (!sound) return; // if sound is turned off no need to continue
-	    	sounds.play(gametie, 1, 1, 1, 0, 1);
-	    //obeep.start();
+	    	sounds.play(soundid, 1, 1, 1, 0, 1);
 	}
 
 	public void buttonGlow(int winner) {
@@ -670,7 +608,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	        	ImageButton button = (ImageButton) findViewById(toechosen);
 	     		button.setBackgroundDrawable(getResources().getDrawable(R.drawable.biggray));
 	     		button.setTag(R.drawable.biggray);
-	     		playToeGobeep();
+	     		playSound(toebeep);
 //	         } 
 //	    }, 1000); 
 	}
@@ -696,7 +634,7 @@ public class ThreeBy3Activity extends Activity implements SensorEventListener {
 	        	 button = (ImageButton) findViewById(toechosen);
 	        	 button.setBackgroundDrawable(getResources().getDrawable(R.drawable.bigtoe));
 	        	 button.setTag(R.drawable.bigtoe);
-	     		 playToebeep();
+	     		 playSound(toebeep);
 //		         } 
 //		    }, 1000); 
  	}
