@@ -55,7 +55,7 @@ public class TicTacToe extends Activity implements SensorEventListener {
 	private SensorManager sensMgr;
 	private Sensor accelerometer;
     private static SoundPool sounds;
-    private static int xbeep, obeep, toebeep, toegobeep, gamewin, gametie; 
+    private static int xbeep, obeep, toebeep, gamewin, gametie; 
     //private static MediaPlayer music;
     private static boolean sound = true;
     private static MediaPlayer trashTalk;
@@ -84,7 +84,6 @@ public class TicTacToe extends Activity implements SensorEventListener {
 	    xbeep = sounds.load(this, R.raw.ttt_x, 1);
 	    obeep = sounds.load(this, R.raw.ttt_o, 1);
 	    toebeep = sounds.load(this, R.raw.toe,1);
-	    toegobeep = sounds.load(this, R.raw.toego,1);
 	    gamewin = sounds.load(this, R.raw.gamewin, 1);
 	    gametie = sounds.load(this, R.raw.gametie, 1);
 	    //music = MediaPlayer.create(context, R.raw.something);
